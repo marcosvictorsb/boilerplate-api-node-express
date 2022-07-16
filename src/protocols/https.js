@@ -46,4 +46,3 @@ module.exports = {
   OK,
   noContent
 }
-Footer
