@@ -7,16 +7,8 @@ class UserController {
   }
 
   create(request, response) {
-    try {
-      const { name, email, password, repeatPassword } = request.body
-      
-      const newUser = {
-        name,
-        email,
-        password,
-        repeatPassword
-      }
-      const result = this.service.create(newUser)
+    try {     
+      const result = this.service.create(request.body)
       return response.status(result.status).json(result.body)
     } catch (error) {
       console.log('UserController')

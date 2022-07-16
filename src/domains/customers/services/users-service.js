@@ -9,11 +9,18 @@ class UserService {
   }
 
   create(user){
+    const { name, email, password, repeatPassword } = user;
 
-    const userAlreadyExists = this.repository.getByEmail(user.email);
-    if(!userAlreadyExists) return conflict(this.enumHelperUser.user.alreadyExists);
-
-    const result = this.repository.create(user);
+    const userAlreadyExists = this.repository.getByEmail(email);
+    if(!userAlreadyExists) return conflict(this.enumHelperUser.user.alreadyExists);    
+      
+    const newUser = {
+      name,
+      email,
+      password,
+      repeatPassword
+    }
+    const result = this.repository.create(newUser);
 
     if(!result) return conflict(this.enumHelperUser.user.errorToCreateUser);
     return created(result)
