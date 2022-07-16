@@ -13,7 +13,7 @@ class UserController {
       const result = this.service.create(request.body);
       return response.status(result.status).json(result.body);
     } catch (error) {
-      this.logger.error(this.enumHelperUser.user.errorToCreateUser);
+      this.logger.error(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`);
       serverError(error.message)
     }
   }
