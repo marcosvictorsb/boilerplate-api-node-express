@@ -1,5 +1,6 @@
 const UserService = require('../services/users-service')
 const UserController = require('../controllers/users-controllers')
+const UserRepository = require('../repositories/users-repository')
 
 const getRepository = () => {
   const tableName = 'users'
