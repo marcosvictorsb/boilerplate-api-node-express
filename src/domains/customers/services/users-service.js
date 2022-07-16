@@ -1,29 +1,38 @@
 const UserRepository = require('../repositories/users-repository')
 const enumHelperUser = require('../../../helpers/enumHelperUser')
-const { created, conflict } = require('../../../protocols/https')
+const logger = require('../../../config/logger');
+const { created, conflict, serverError } = require('../../../protocols/https')
 
 class UserService {
   constructor(params = {}){
     this.repository = params.repository || new UserRepository();
     this.enumHelperUser = params.enumHelperUser || enumHelperUser;
+    this.logger = params.logger || logger;
   }
 
   create(user){
-    const { name, email, password, repeatPassword } = user;
+    try {
+      const { name, email, password, repeatPassword } = user;
 
-    const userAlreadyExists = this.repository.getByEmail(email);
-    if(!userAlreadyExists) return conflict(this.enumHelperUser.user.alreadyExists);    
+      const userAlreadyExists = this.repository.getByEmail(email);
+      if(!!userAlreadyExists) {
+        this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.alreadyExists} : ${email}`)
+        return conflict(this.enumHelperUser.user.alreadyExists);    
+      }
       
-    const newUser = {
-      name,
-      email,
-      password,
-      repeatPassword
-    }
-    const result = this.repository.create(newUser);
+        
+      const newUser = { name, email, password, repeatPassword }
+      const result = this.repository.create(newUser);    
 
-    if(!result) return conflict(this.enumHelperUser.user.errorToCreateUser);
-    return created(result)
+      if(!result) {
+        this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`)
+        return conflict(this.enumHelperUser.user.errorToCreateUser);
+      }
+      return created(result)
+    } catch (error) {
+      this.logger.info(`[CREATE USER SERVICE] - error to create user`);
+      return serverError(error.message)
+    }
   }
 }
 
