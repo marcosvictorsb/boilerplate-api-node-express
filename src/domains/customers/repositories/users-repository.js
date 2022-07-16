@@ -1,8 +1,8 @@
 const users = []
 
 class UserRepository {
-  constructor(){
-
+  constructor(params = {}) {
+    this.tableName = params.tableName || 'users';
   }
 
   create(user){
