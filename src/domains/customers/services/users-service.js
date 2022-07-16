@@ -18,16 +18,15 @@ class UserService {
       if(!!userAlreadyExists) {
         this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.alreadyExists} : ${email}`)
         return conflict(this.enumHelperUser.user.alreadyExists);    
-      }
-      
+      }      
         
       const newUser = { name, email, password, repeatPassword }
       const result = this.repository.create(newUser);    
-
       if(!result) {
         this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`)
         return conflict(this.enumHelperUser.user.errorToCreateUser);
       }
+
       return created(result)
     } catch (error) {
       this.logger.info(`[CREATE USER SERVICE] - error to create user`);
