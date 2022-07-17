@@ -8,6 +8,10 @@ class AdpaterEncryption {
 
     return hash;
   }
+
+  static comparePasswords(password1, password2) {
+    return bcrypt.compareSync(password1, password2);
+  }
 }
 
 module.exports = AdpaterEncryption;
