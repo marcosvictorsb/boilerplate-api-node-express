@@ -19,6 +19,17 @@ class UserController {
       return serverError(error.message);
     }
   }
+
+  async getByEmail(request, response) {
+    try {
+      const { email } = request.body;
+      const result = await this.service.getByEmail(email);
+      return response.status(result.status).json(result.body);
+    } catch (error) {
+      this.logger.error(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`);
+      return serverError(error.message);
+    }
+  }
 }
 
 module.exports = UserController;

@@ -2,7 +2,9 @@ const UserRepository = require('../repositories/users-repository');
 const AdpaterEncryption = require('../adapters/adpterEncryption');
 const enumHelperUser = require('../../../helpers/enumHelperUser');
 const logger = require('../../../config/logger');
-const { created, conflict, serverError } = require('../../../protocols/https');
+const {
+  created, conflict, serverError, OK,
+} = require('../../../protocols/https');
 
 class UserService {
   constructor(params = {}) {
@@ -35,6 +37,20 @@ class UserService {
       return created(result);
     } catch (error) {
       this.logger.info('[CREATE USER SERVICE] - error to create user');
+      return serverError(error.message);
+    }
+  }
+
+  async getByEmail(email) {
+    try {
+      const user = await this.repository.getByEmail(email);
+      if (!user) {
+        this.logger.info('[CREATE USER SERVICE] - error to get user by email');
+        return conflict(this.enumHelperUser.user.notFoundUser);
+      }
+      return OK(user);
+    } catch (error) {
+      this.logger.info('[CREATE USER SERVICE] - error to get user by email');
       return serverError(error.message);
     }
   }
