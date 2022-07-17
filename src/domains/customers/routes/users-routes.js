@@ -1,7 +1,7 @@
-const { getController } = require('../factories')
+const { getController } = require('../factories');
 
 const controller = getController();
 
-exports.loadRoutes = loadRoutes = (server) => {
-  server.post('/users', (...args) => controller.create(...args))
+exports.loadRoutes = function loadRoutes(server) {
+  server.post('/users', (...args) => controller.create(...args));
 };

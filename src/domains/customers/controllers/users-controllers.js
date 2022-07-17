@@ -1,25 +1,24 @@
-const UserService = require('../services/users-service')
-const enumHelperUser = require('../../../helpers/enumHelperUser')
+const UserService = require('../services/users-service');
+const enumHelperUser = require('../../../helpers/enumHelperUser');
 const logger = require('../../../config/logger');
 const { serverError } = require('../../../protocols/https');
 
-class UserController { 
+class UserController {
   constructor(params = {}) {
-    this.service = params.service || new UserService()
+    this.service = params.service || new UserService();
     this.logger = params.logger || logger;
     this.enumHelperUser = params.enumHelperUser || enumHelperUser;
   }
 
   async create(request, response) {
-    try {     
+    try {
       const result = await this.service.create(request.body);
       return response.status(result.status).json(result.body);
     } catch (error) {
       this.logger.error(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`);
-      serverError(error.message)
+      return serverError(error.message);
     }
   }
 }
-
 
 module.exports = UserController;

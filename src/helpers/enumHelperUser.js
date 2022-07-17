@@ -4,9 +4,8 @@ const enumHelperUser = {
     errorToCreatedUser: 'error created user',
     notFoundUser: 'user not found',
     updateUser: 'user updated',
-    delete: 'user deleted'
+    delete: 'user deleted',
   },
-}
-
+};
 
 module.exports = enumHelperUser;

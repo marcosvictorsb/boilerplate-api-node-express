@@ -4,38 +4,38 @@ const HttpStatusCode = {
   noContent: 204,
   notFound: 404,
   Conflict: 409,
-  serverError: 500
-}
+  serverError: 500,
+};
 
 const OK = (response) => ({
   status: HttpStatusCode.OK,
-  body: { result: response }
-})
+  body: { result: response },
+});
 
 const conflict = (error) => ({
   status: HttpStatusCode.Conflict,
-  body: { error }
-})
+  body: { error },
+});
 
 const noContent = (message) => ({
   status: HttpStatusCode.noContent,
-  body: { result: message }
-})
+  body: { result: message },
+});
 
 const created = (response) => ({
   status: HttpStatusCode.Created,
-  body: { result: response }
-})
+  body: { result: response },
+});
 
 const notFound = (response) => ({
   status: HttpStatusCode.notFound,
-  body: { result: response }
-})
+  body: { result: response },
+});
 
 const serverError = (error) => ({
   status: HttpStatusCode.serverError,
-  body:{ error }
-})
+  body: { error },
+});
 
 module.exports = {
   HttpStatusCode,
@@ -44,5 +44,5 @@ module.exports = {
   serverError,
   notFound,
   OK,
-  noContent
-}
+  noContent,
+};

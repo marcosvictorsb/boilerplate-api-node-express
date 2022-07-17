@@ -9,6 +9,4 @@ app.use(bodyParser.json());
 
 routers(app);
 
-
-
 module.exports = app;

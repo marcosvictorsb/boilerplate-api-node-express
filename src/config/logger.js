@@ -7,12 +7,12 @@ const logLevels = {
   info: 3,
   debug: 4,
   trace: 5,
-}
+};
 
 const logger = createLogger({
   levels: logLevels,
   format: format.combine(format.timestamp(), format.json()),
-  transports: [new transports.Console()]
-})
+  transports: [new transports.Console()],
+});
 
 module.exports = logger;
