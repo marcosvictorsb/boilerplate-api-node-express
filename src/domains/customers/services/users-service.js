@@ -16,7 +16,7 @@ class UserService {
       const { name, email, password } = user;
 
       const userAlreadyExists = await this.repository.getByEmail(email);
-      if (userAlreadyExists && userAlreadyExists.length) {
+      if (userAlreadyExists) {
         this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.alreadyExists} : ${email}`);
         return conflict(this.enumHelperUser.user.alreadyExists);
       }

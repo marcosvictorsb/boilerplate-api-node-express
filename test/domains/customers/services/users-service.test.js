@@ -25,7 +25,7 @@ describe('USERS SERVICE', () => {
     };
 
     this.service.repository = {
-      getByEmail: stub().resolves([]),
+      getByEmail: stub().resolves(undefined),
       create: stub().resolves(undefined),
     };
 
