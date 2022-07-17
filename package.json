@@ -7,6 +7,9 @@
     "start": "nodemon server.js",
     "test": "mocha './test/**/*test.js'"
   },
+  "pre-commit": [
+    "test"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MarcosVictorSB/boilerplate-api-node-express.git"
@@ -25,6 +28,7 @@
     "express": "^4.18.1",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
+    "pre-commit": "^1.2.2",
     "sinon": "^14.0.0",
     "winston": "^3.8.1"
   }
