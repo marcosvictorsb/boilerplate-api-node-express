@@ -8,7 +8,7 @@ class UserRepository {
     this.logger = params.logger || logger;
   }
 
-  create(user){
+  async create(user){
     try {
       users.push(user);
       this.logger.info(`[CREATE USER REPOSITORY] - return user`)
@@ -20,7 +20,7 @@ class UserRepository {
     }
   }
 
-  getByEmail(email){
+  async getByEmail(email){
     try {
       const user = users.filter(user => user.email === email);
       this.logger.info(`[CREATE USER REPOSITORY] - return user`)

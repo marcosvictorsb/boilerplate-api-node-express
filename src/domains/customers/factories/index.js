@@ -19,7 +19,7 @@ const getService = () => {
 
 const getController = () => {
   const service = getService();
-  return new UserController({ service, logger });
+  return new UserController({ service, logger, enumHelperUser });
 }
 
 module.exports = {

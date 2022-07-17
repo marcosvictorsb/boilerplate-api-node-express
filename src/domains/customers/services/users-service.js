@@ -11,11 +11,11 @@ class UserService {
     this.logger = params.logger || logger;
   }
 
-  create(user){
+  async create(user){
     try {
       const { name, email, password } = user;
 
-      const userAlreadyExists = this.repository.getByEmail(email);
+      const userAlreadyExists = await this.repository.getByEmail(email);
       if(!!userAlreadyExists) {
         this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.alreadyExists} : ${email}`)
         return conflict(this.enumHelperUser.user.alreadyExists);    
@@ -23,7 +23,7 @@ class UserService {
       
       
       const newUser = { name, email, passwordEncryption: AdpaterEncryption.generateHashPassword(password) }
-      const result = this.repository.create(newUser);    
+      const result = await this.repository.create(newUser);    
       if(!result) {
         this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`)
         return conflict(this.enumHelperUser.user.errorToCreateUser);
