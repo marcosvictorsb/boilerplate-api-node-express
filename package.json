@@ -10,6 +10,7 @@
   "pre-commit": [
     "test"
   ],
+  "eslintIgnore": ["*.test.js", "world.js"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MarcosVictorSB/boilerplate-api-node-express.git"
