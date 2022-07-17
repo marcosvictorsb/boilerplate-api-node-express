@@ -1,5 +1,5 @@
 const UserService = require('../services/users-service');
-const UserController = require('../controllers/users-controllers');
+const UserController = require('../controller/users-controllers');
 const UserRepository = require('../repositories/users-repository');
 const logger = require('../../../config/logger');
 const enumHelperUser = require('../../../helpers/enumHelperUser');
@@ -24,4 +24,5 @@ const getController = () => {
 
 module.exports = {
   getController,
+  getService,
 };
