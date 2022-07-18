@@ -34,11 +34,18 @@ class UserService {
         return conflict(this.enumHelperUser.user.errorToCreateUser);
       }
 
-      return created(result);
+      const userCreated = this.removePassword(result);
+      return created(userCreated);
     } catch (error) {
       this.logger.info('[CREATE USER SERVICE] - error to create user');
       return serverError(error.message);
     }
+  }
+
+  /* eslint-disable */
+  removePassword(user) {
+    user.passwordEncryption = undefined;
+    return user;
   }
 
   async getByEmail(email) {

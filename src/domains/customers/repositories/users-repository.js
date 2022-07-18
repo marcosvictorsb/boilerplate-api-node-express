@@ -14,7 +14,7 @@ class UserRepository {
       users.push(user);
       this.logger.info('[CREATE USER REPOSITORY] - return user');
 
-      return users;
+      return users[0];
     } catch (error) {
       this.logger.error('[CREATE USER REPOSITORY] - error to create user');
       return serverError(error.message);
