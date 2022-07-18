@@ -5,6 +5,8 @@ const enumHelperUser = {
     notFoundUser: 'user not found',
     updateUser: 'user updated',
     delete: 'user deleted',
+    emailOrPassword: 'email or password is invalid',
+    mismatchPassword: 'password mismatch between,',
   },
 };
 

@@ -54,6 +54,21 @@ class UserService {
       return serverError(error.message);
     }
   }
+
+  comparePasswords(password, userPassword) {
+    try {
+      const result = AdpaterEncryption.comparePasswords(password, userPassword);
+      if (!result) {
+        this.logger.info('[CREATE USER SERVICE] - [COMPARE PASSWORD] - password mismatch');
+        conflict(this.enumHelperUser.user.mismatchPassword);
+      }
+
+      return OK(result);
+    } catch (error) {
+      this.logger.error('[CREATE USER SERVICE] - [COMPARE PASSWORD] - password mismatch');
+      return serverError(error.message);
+    }
+  }
 }
 
 module.exports = UserService;
