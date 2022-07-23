@@ -12,8 +12,8 @@ class AuthenticationController extends Controller {
 
   async authenticate(request, response) {
     try {
-      const authenticated = await this.validator.validateBodyParams(request.body);
-      const result = await this.serviceAuth.authenticate(authenticated);
+      const { email, password } = await this.validator.validateBodyParams(request.body);
+      const result = await this.serviceAuth.authenticate(email, password);
       return response.status(result.status).json(result.body);
     } catch (error) {
       return this.errorHandler(error, request, response);
