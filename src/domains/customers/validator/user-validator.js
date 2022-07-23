@@ -1,6 +1,6 @@
 const { schema } = require('./user-schema');
 
-class UserValidator {
+class CustomerValidator {
   constructor(params = {}) {
     this.schema = params.schema || schema;
   }
@@ -11,4 +11,4 @@ class UserValidator {
   }
 }
 
-module.exports = UserValidator;
+module.exports = CustomerValidator;

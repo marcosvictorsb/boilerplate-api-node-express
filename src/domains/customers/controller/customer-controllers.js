@@ -1,7 +1,7 @@
 const Controller = require('../../../interfaces/base-controller');
 const { serverError } = require('../../../protocols/https');
 
-class UserController extends Controller {
+class CustomerController extends Controller {
   constructor(params = {}) {
     super();
     this.service = params.service;
@@ -33,4 +33,4 @@ class UserController extends Controller {
   }
 }
 
-module.exports = UserController;
+module.exports = CustomerController;

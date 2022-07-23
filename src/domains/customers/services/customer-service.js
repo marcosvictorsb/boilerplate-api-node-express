@@ -1,4 +1,4 @@
-const UserRepository = require('../repositories/users-repository');
+const UserRepository = require('../repositories/customer-repository');
 const AdapterEncryption = require('../adapter/adapterEncryption');
 const AdapterToken = require('../../authentication/adapter/adapterToken');
 const enumHelperUser = require('../../../helpers/enumHelperUser');
@@ -7,7 +7,7 @@ const {
   created, conflict, serverError, OK,
 } = require('../../../protocols/https');
 
-class UserService {
+class CustomerService {
   constructor(params = {}) {
     this.repository = params.repository || new UserRepository();
     this.enumHelperUser = params.enumHelperUser || enumHelperUser;
@@ -80,4 +80,4 @@ class UserService {
   }
 }
 
-module.exports = UserService;
+module.exports = CustomerService;

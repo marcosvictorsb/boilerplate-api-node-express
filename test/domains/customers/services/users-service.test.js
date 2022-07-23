@@ -2,17 +2,17 @@ const { expect } = require('chai');
 const { stub, assert } = require('sinon');
 
 const logger = require('../../../../src/config/logger');
-const UserRepository = require('../../../../src/domains/customers/repositories/users-repository');
-const UserService = require('../../../../src/domains/customers/services/users-service');
+const CustomerRepository = require('../../../../src/domains/customers/repositories/customer-repository');
+const CustomerService = require('../../../../src/domains/customers/services/customer-service');
 const enumHelperUser = require('../../../../src/helpers/enumHelperUser');
 const { HttpStatusCode } = require('../../../../src/protocols/https');
 
-describe('USERS SERVICE', () => {
+describe('CUSTOMER SERVICE', () => {
   beforeEach(() => {
-    this.repository = new UserRepository();
+    this.repository = new CustomerRepository();
     this.enumHelperUser = enumHelperUser;
     this.logger = logger;
-    this.service = new UserService({
+    this.service = new CustomerService({
       repository: this.repository,
       enumHelperUser,
       logger: this.logger,
