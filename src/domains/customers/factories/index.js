@@ -3,7 +3,7 @@ const UserController = require('../controller/users-controllers');
 const UserRepository = require('../repositories/users-repository');
 const logger = require('../../../config/logger');
 const enumHelperUser = require('../../../helpers/enumHelperUser');
-const UserValidator = require('../validate/user-validator');
+const UserValidator = require('../validator/user-validator');
 
 const getRepository = () => {
   const tableName = 'users';
