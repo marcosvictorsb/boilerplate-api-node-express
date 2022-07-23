@@ -13,10 +13,12 @@ const getRepository = () => {
   });
 };
 
-const getService = () => {
-  const repository = getRepository();
-  return new UserService({ repository, enumHelperUser, logger });
-};
+const getService = (params = {}) => new UserService({
+  repository: params.repository || getRepository(),
+  enumHelperUser: params.enumHelperUser || enumHelperUser,
+  logger: params.logger || logger,
+  validator: params.validator || new UserValidator(),
+});
 
 const getController = (params = {}) => new UserController({
   service: params.service || getService(),

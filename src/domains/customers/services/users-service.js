@@ -1,5 +1,6 @@
 const UserRepository = require('../repositories/users-repository');
-const AdpaterEncryption = require('../adapters/adpterEncryption');
+const AdapterEncryption = require('../adapter/adapterEncryption');
+const AdapterToken = require('../../authentication/adapter/adapterToken');
 const enumHelperUser = require('../../../helpers/enumHelperUser');
 const logger = require('../../../config/logger');
 const {
@@ -26,7 +27,7 @@ class UserService {
       const newUser = {
         name,
         email,
-        passwordEncryption: AdpaterEncryption.generateHashPassword(password),
+        passwordEncryption: AdapterEncryption.generateHashPassword(password),
       };
       const result = await this.repository.create(newUser);
       if (!result) {
@@ -35,6 +36,7 @@ class UserService {
       }
 
       const userCreated = this.removePassword(result);
+      userCreated.token = AdapterToken.sign(user.id);
       return created(userCreated);
     } catch (error) {
       this.logger.info('[CREATE USER SERVICE] - error to create user');

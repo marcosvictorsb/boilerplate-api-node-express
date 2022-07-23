@@ -2,7 +2,7 @@ const { conflict, OK, serverError } = require('../../../protocols/https');
 const enumHelperUser = require('../../../helpers/enumHelperUser');
 const UserService = require('../../customers/services/users-service');
 const logger = require('../../../config/logger');
-const AdapterToken = require('../adapter/adaptetToken');
+const AdapterToken = require('../adapter/adapterToken');
 
 class AuthenticationService {
   constructor(params = {}) {

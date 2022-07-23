@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-class AdpaterEncryption {
+class AdapterEncryption {
   static generateHashPassword(password) {
     const SALT_ROUNDS = 10;
     const salt = bcrypt.genSaltSync(SALT_ROUNDS);
@@ -14,4 +14,4 @@ class AdpaterEncryption {
   }
 }
 
-module.exports = AdpaterEncryption;
+module.exports = AdapterEncryption;

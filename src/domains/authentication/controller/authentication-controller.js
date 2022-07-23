@@ -5,6 +5,9 @@ class AuthenticationController extends Controller {
     super();
     this.serviceAuth = params.serviceAuth;
     this.validator = params.validator;
+    this.customerService = params.customerService;
+    this.enumHelper = params.enumHelper;
+    this.logger = params.logger;
   }
 
   async authenticate(request, response) {
@@ -13,6 +16,17 @@ class AuthenticationController extends Controller {
       const result = await this.serviceAuth.authenticate(authenticated);
       return response.status(result.status).json(result.body);
     } catch (error) {
+      return this.errorHandler(error, request, response);
+    }
+  }
+
+  async register(request, response) {
+    try {
+      const customer = await this.validator.validateBodyParams(request.body);
+      const result = await this.customerService.create(customer);
+      return response.status(result.status).json(result.body);
+    } catch (error) {
+      this.logger.error(`[CREATE USER CONTROLLER] - ${this.enumHelper.user.errorToCreatedUser}`);
       return this.errorHandler(error, request, response);
     }
   }
