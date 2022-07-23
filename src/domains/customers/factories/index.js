@@ -3,6 +3,7 @@ const UserController = require('../controller/users-controllers');
 const UserRepository = require('../repositories/users-repository');
 const logger = require('../../../config/logger');
 const enumHelperUser = require('../../../helpers/enumHelperUser');
+const UserValidator = require('../validate/user-validator');
 
 const getRepository = () => {
   const tableName = 'users';
@@ -17,10 +18,12 @@ const getService = () => {
   return new UserService({ repository, enumHelperUser, logger });
 };
 
-const getController = () => {
-  const service = getService();
-  return new UserController({ service, logger, enumHelperUser });
-};
+const getController = (params = {}) => new UserController({
+  service: params.service || getService(),
+  logger: params.logger || logger,
+  enumHelperUser: params.enumHelperUser || enumHelperUser,
+  validator: params.validator || new UserValidator(),
+});
 
 module.exports = {
   getController,
