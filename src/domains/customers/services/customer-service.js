@@ -12,6 +12,8 @@ class CustomerService {
     this.repository = params.repository || new UserRepository();
     this.enumHelperUser = params.enumHelperUser || enumHelperUser;
     this.logger = params.logger || logger;
+    this.adapterEncryption = params.adapterEncryption || AdapterEncryption;
+    this.adapterToken = params.adapterToken || AdapterToken;
   }
 
   async create(user) {
@@ -27,7 +29,7 @@ class CustomerService {
       const newUser = {
         name,
         email,
-        passwordEncryption: AdapterEncryption.generateHashPassword(password),
+        passwordEncryption: this.adapterEncryption.generateHashPassword(password),
       };
       const result = await this.repository.create(newUser);
       if (!result) {
@@ -36,7 +38,7 @@ class CustomerService {
       }
 
       const userCreated = this.removePassword(result);
-      userCreated.token = AdapterToken.sign(user.id);
+      userCreated.token = this.adapterToken.sign(user.id);
       return created(userCreated);
     } catch (error) {
       this.logger.info('[CREATE USER SERVICE] - error to create user');
