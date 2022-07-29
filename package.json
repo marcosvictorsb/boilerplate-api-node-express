@@ -34,6 +34,8 @@
     "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
     "pre-commit": "^1.2.2",
+    "sequelize": "^6.21.3",
+    "sequelize-cli": "^6.4.1",
     "sinon": "^14.0.0",
     "winston": "^3.8.1"
   },
