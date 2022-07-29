@@ -9,6 +9,7 @@ class AuthenticationService {
     this.enumHelperUser = params.enumHelperUser || enumHelperUser;
     this.customerService = params.customerService || new CustomerService();
     this.logger = params.logger || logger;
+    this.adapterToken = params.adapterToken || AdapterToken;
   }
 
   async authenticate(email, password) {
@@ -29,7 +30,7 @@ class AuthenticationService {
       }
       /* eslint-disable no-param-reassign */
       user.passwordEncryption = undefined;
-      user.token = AdapterToken.sign(user.id);
+      user.token = this.adapterToken.sign(user.id);
       return OK(user);
     } catch (error) {
       this.logger.error('[AuthenticationService] - error to compare the password');

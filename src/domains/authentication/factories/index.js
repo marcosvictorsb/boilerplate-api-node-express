@@ -5,6 +5,7 @@ const { schema } = require('../validator/authentication-schema');
 const factory = require('../../customers/factories/index');
 const enumHelperUser = require('../../../helpers/enumHelperUser');
 const logger = require('../../../config/logger');
+const AdapterToken = require('../adapter/adapterToken');
 
 const getController = (params = {}) => new AuthenticationController({
   serviceAuth: params.serviceAuth || new AuthenticationService(),
@@ -12,6 +13,7 @@ const getController = (params = {}) => new AuthenticationController({
   customerService: params.customerService || factory.getService(),
   enumHelper: params.enumHelper || enumHelperUser,
   logger: params.logger || logger,
+  adapterToken: params.adapterToken || AdapterToken,
 });
 
 module.exports = { getController };
