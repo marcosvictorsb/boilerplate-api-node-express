@@ -1,34 +1,43 @@
 const logger = require('../../../config/logger');
 const { serverError } = require('../../../protocols/https');
 
-const customer = [];
+const customers = [];
 
 class CustomerRepository {
   constructor(params = {}) {
-    this.tableName = params.tableName || 'users';
+    this.tableName = params.tableName || 'customers';
     this.logger = params.logger || logger;
   }
 
-  async create(user) {
+  async create(customer) {
     try {
-      customer.push(user);
-      this.logger.info('[CREATE USER REPOSITORY] - return user');
+      customers.push(customer);
+      this.logger.info('[CUSTOMER REPOSITORY] - return customer');
 
-      return customer[customer.length - 1];
+      return customers[customers.length - 1];
     } catch (error) {
-      this.logger.error('[CREATE USER REPOSITORY] - error to create user');
+      this.logger.error('[CUSTOMER REPOSITORY] - error to create customer');
       return serverError(error.message);
     }
   }
 
   async getByEmail(email) {
     try {
-      const result = customer.filter((user) => user.email === email);
-      this.logger.info('[CREATE USER REPOSITORY] - return user');
+      const result = customers.filter((customer) => customer.email === email);
+      this.logger.info('[CUSTOMER REPOSITORY] - return customer');
 
       return result[0];
     } catch (error) {
-      this.logger.error('[CREATE USER REPOSITORY] - error to get user by email');
+      this.logger.error('[CUSTOMER REPOSITORY] - error to get customer by email');
+      return serverError(error.message);
+    }
+  }
+
+  async getAllCustomers() {
+    try {
+      return customers;
+    } catch (error) {
+      this.logger.error('[CUSTOMER REPOSITORY] - error to get all customers');
       return serverError(error.message);
     }
   }

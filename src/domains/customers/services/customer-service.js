@@ -22,7 +22,7 @@ class CustomerService {
 
       const userAlreadyExists = await this.repository.getByEmail(email);
       if (userAlreadyExists) {
-        this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.alreadyExists} : ${email}`);
+        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperUser.user.alreadyExists} : ${email}`);
         return conflict(this.enumHelperUser.user.alreadyExists);
       }
 
@@ -33,7 +33,7 @@ class CustomerService {
       };
       const result = await this.repository.create(newUser);
       if (!result) {
-        this.logger.info(`[CREATE USER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`);
+        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`);
         return conflict(this.enumHelperUser.user.errorToCreateUser);
       }
 
@@ -41,7 +41,7 @@ class CustomerService {
       userCreated.token = this.adapterToken.sign(user.id);
       return created(userCreated);
     } catch (error) {
-      this.logger.info('[CREATE USER SERVICE] - error to create user');
+      this.logger.info('[CUSTOMER SERVICE] - error to create user');
       return serverError(error.message);
     }
   }
@@ -56,12 +56,12 @@ class CustomerService {
     try {
       const user = await this.repository.getByEmail(email);
       if (!user) {
-        this.logger.info('[CREATE USER SERVICE] - error to get user by email');
+        this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
         return conflict(this.enumHelperUser.user.notFoundUser);
       }
       return OK(user);
     } catch (error) {
-      this.logger.info('[CREATE USER SERVICE] - error to get user by email');
+      this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
       return serverError(error.message);
     }
   }
@@ -70,13 +70,28 @@ class CustomerService {
     try {
       const result = this.adapterEncryption.comparePasswords(password, userPassword);
       if (!result) {
-        this.logger.info('[CREATE USER SERVICE] - [COMPARE PASSWORD] - password mismatch');
+        this.logger.info('[CUSTOMER SERVICE] - [COMPARE PASSWORD] - password mismatch');
         conflict(this.enumHelperUser.user.mismatchPassword);
       }
 
       return OK(result);
     } catch (error) {
-      this.logger.error('[CREATE USER SERVICE] - [COMPARE PASSWORD] - password mismatch');
+      this.logger.error('[CUSTOMER SERVICE] - [COMPARE PASSWORD] - password mismatch');
+      return serverError(error.message);
+    }
+  }
+
+  async getAllCustomers() {
+    try {
+      const customers = await this.repository.getAllCustomers();
+      if (!customers) {
+        this.logger.info('[CUSTOMER SERVICE] - doesn\'t customers registered');
+        conflict(this.enumHelperUser.user.doNotCustomersRegistered);
+      }
+
+      return OK(customers);
+    } catch (error) {
+      this.logger.error('[CUSTOMER SERVICE] - intern error to get all customers');
       return serverError(error.message);
     }
   }

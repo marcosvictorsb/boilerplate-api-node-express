@@ -16,7 +16,7 @@ class CustomerController extends Controller {
       const result = await this.service.create(customer);
       return response.status(result.status).json(result.body);
     } catch (error) {
-      this.logger.error(`[CREATE USER CONTROLLER] - ${this.enumHelperUser.user.errorToCreatedUser}`);
+      this.logger.error(`[CUSTOMER CONTROLLER] - ${this.enumHelperUser.user.errorToCreatedUser}`);
       return this.errorHandler(error, request, response);
     }
   }
@@ -27,7 +27,17 @@ class CustomerController extends Controller {
       const result = await this.service.getByEmail(email);
       return response.status(result.status).json(result.body);
     } catch (error) {
-      this.logger.error(`[CREATE USER CONTROLLER] - ${this.enumHelperUser.user.errorToCreateUser}`);
+      this.logger.error(`[CUSTOMER CONTROLLER] - ${this.enumHelperUser.user.errorToCreateUser}`);
+      return serverError(error.message);
+    }
+  }
+
+  async getAllCustomers(request, response) {
+    try {
+      const result = await this.service.getAllCustomers();
+      return response.status(result.status).json(result.body);
+    } catch (error) {
+      this.logger.error(`[CUSTOMER CONTROLLER] - ${this.enumHelperUser.user.errorToCreateUser}`);
       return serverError(error.message);
     }
   }

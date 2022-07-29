@@ -6,7 +6,9 @@ const enumHelperUser = {
     updateUser: 'user updated',
     delete: 'user deleted',
     emailOrPassword: 'email or password is invalid',
-    mismatchPassword: 'password mismatch between,',
+    mismatchPassword: 'password mismatch between',
+    doNotCustomersRegistered: 'doesn\'t customers registered',
+
   },
 };
 
