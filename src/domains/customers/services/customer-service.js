@@ -68,7 +68,7 @@ class CustomerService {
 
   comparePasswords(password, userPassword) {
     try {
-      const result = AdpaterEncryption.comparePasswords(password, userPassword);
+      const result = this.adapterEncryption.comparePasswords(password, userPassword);
       if (!result) {
         this.logger.info('[CREATE USER SERVICE] - [COMPARE PASSWORD] - password mismatch');
         conflict(this.enumHelperUser.user.mismatchPassword);

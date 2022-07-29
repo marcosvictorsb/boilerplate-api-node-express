@@ -14,7 +14,7 @@ class CustomerRepository {
       customer.push(user);
       this.logger.info('[CREATE USER REPOSITORY] - return user');
 
-      return customer[0];
+      return customer[customer.length - 1];
     } catch (error) {
       this.logger.error('[CREATE USER REPOSITORY] - error to create user');
       return serverError(error.message);
