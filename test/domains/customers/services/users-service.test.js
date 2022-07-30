@@ -4,17 +4,17 @@ const { stub, assert } = require('sinon');
 const logger = require('../../../../src/config/logger');
 const CustomerRepository = require('../../../../src/domains/customers/repositories/customer-repository');
 const CustomerService = require('../../../../src/domains/customers/services/customer-service');
-const enumHelperUser = require('../../../../src/helpers/enumHelperUser');
+const enumHelperCustomer = require('../../../../src/helpers/enumHelperCustomer');
 const { HttpStatusCode } = require('../../../../src/protocols/https');
 
 describe('CUSTOMER SERVICE', () => {
   beforeEach(() => {
     this.repository = new CustomerRepository();
-    this.enumHelperUser = enumHelperUser;
+    this.enumHelperCustomer = enumHelperCustomer;
     this.logger = logger;
     this.service = new CustomerService({
       repository: this.repository,
-      enumHelperUser,
+      enumHelperCustomer,
       logger: this.logger,
     });
 

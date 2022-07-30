@@ -1,4 +1,4 @@
-const { schema } = require('./user-schema');
+const { schema } = require('./customer-schema');
 
 class CustomerValidator {
   constructor(params = {}) {

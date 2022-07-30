@@ -6,7 +6,7 @@ class AuthenticationController extends Controller {
     this.serviceAuth = params.serviceAuth;
     this.validator = params.validator;
     this.customerService = params.customerService;
-    this.enumHelper = params.enumHelper;
+    this.enumHelperCustomer = params.enumHelperCustomer;
     this.logger = params.logger;
   }
 
@@ -26,7 +26,7 @@ class AuthenticationController extends Controller {
       const result = await this.customerService.create(customer);
       return response.status(result.status).json(result.body);
     } catch (error) {
-      this.logger.error(`[CREATE USER CONTROLLER] - ${this.enumHelper.user.errorToCreatedUser}`);
+      this.logger.error(`[REGISTER AUTHENTICATION] ${error.message} - ${this.enumHelperCustomer.customer.errorToCreatedUser}`);
       return this.errorHandler(error, request, response);
     }
   }
