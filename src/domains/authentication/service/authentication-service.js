@@ -1,15 +1,11 @@
 const { conflict, OK, serverError } = require('../../../protocols/https');
-const enumHelperCustomer = require('../../../helpers/enumHelperCustomer');
-const CustomerService = require('../../customers/services/customer-service');
-const logger = require('../../../config/logger');
-const AdapterToken = require('../adapter/adapterToken');
 
 class AuthenticationService {
   constructor(params = {}) {
-    this.enumHelperCustomer = params.enumHelperCustomer || enumHelperCustomer;
-    this.customerService = params.customerService || new CustomerService();
-    this.logger = params.logger || logger;
-    this.adapterToken = params.adapterToken || AdapterToken;
+    this.enumHelperCustomer = params.enumHelperCustomer;
+    this.customerService = params.customerService;
+    this.logger = params.logger;
+    this.adapterToken = params.adapterToken;
   }
 
   async authenticate(email, password) {

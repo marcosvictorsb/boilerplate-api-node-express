@@ -1,15 +1,14 @@
-const logger = require('../../../config/logger');
 const { serverError } = require('../../../protocols/https');
-const Customers = require('../../../infra/database/models/customers');
 
 class CustomerRepository {
   constructor(params = {}) {
-    this.logger = params.logger || logger;
+    this.logger = params.logger;
+    this.model = params.model;
   }
 
   async create(customer) {
     try {
-      const customerCreated = await Customers.create(customer);
+      const customerCreated = await this.model.create(customer);
       return customerCreated.dataValues;
     } catch (error) {
       this.logger.error('[CUSTOMER REPOSITORY] - error to create customer');
@@ -19,7 +18,7 @@ class CustomerRepository {
 
   async getByEmail(email) {
     try {
-      const customer = await Customers.findAll({ where: { email } });
+      const customer = await this.model.findAll({ where: { email } });
       return customer[0].dataValues;
     } catch (error) {
       this.logger.error('[CUSTOMER REPOSITORY] - error to get customer by email');
@@ -29,7 +28,7 @@ class CustomerRepository {
 
   async getAllCustomers() {
     try {
-      const customers = await Customers.findAll();
+      const customers = await this.model.findAll();
       return customers;
     } catch (error) {
       this.logger.error('[CUSTOMER REPOSITORY] - error to get all customers');

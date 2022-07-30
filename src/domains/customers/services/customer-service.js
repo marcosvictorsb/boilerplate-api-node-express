@@ -1,20 +1,14 @@
-require('module-alias/register');
-const logger = require('@config/logger');
-const CustomerRepository = require('../repositories/customer-repository');
-const AdapterEncryption = require('../adapter/adapterEncryption');
-const AdapterToken = require('../../authentication/adapter/adapterToken');
-const enumHelperCustomer = require('../../../helpers/enumHelperCustomer');
 const {
   created, conflict, serverError, OK,
 } = require('../../../protocols/https');
 
 class CustomerService {
   constructor(params = {}) {
-    this.repository = params.repository || new CustomerRepository();
-    this.enumHelperCustomer = params.enumHelperCustomer || enumHelperCustomer;
-    this.logger = params.logger || logger;
-    this.adapterEncryption = params.adapterEncryption || AdapterEncryption;
-    this.adapterToken = params.adapterToken || AdapterToken;
+    this.repository = params.repository;
+    this.enumHelperCustomer = params.enumHelperCustomer;
+    this.logger = params.logger;
+    this.adapterEncryption = params.adapterEncryption;
+    this.adapterToken = params.adapterToken;
   }
 
   async create(params) {
