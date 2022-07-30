@@ -1,37 +1,33 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
+const Sequelize = require('sequelize');
+const database = require('./db');
 
-const sequelize = new Sequelize();
-
-class Customers extends Model { }
-
-Customers.init({
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
+const Customers = database.define(
+  'Customers',
+  {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER,
+    },
+    name: {
+      type: Sequelize.STRING,
+    },
+    email: {
+      type: Sequelize.STRING,
+    },
+    password: {
+      type: Sequelize.STRING,
+    },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  deleted: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: Date.now(),
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-  },
-
-}, {
-  sequelize,
-  modelName: 'Customers',
-});
+);
 
 module.exports = Customers;
