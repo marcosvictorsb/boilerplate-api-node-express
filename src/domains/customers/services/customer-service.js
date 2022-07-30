@@ -1,8 +1,9 @@
+require('module-alias/register');
+const logger = require('@config/logger');
 const CustomerRepository = require('../repositories/customer-repository');
 const AdapterEncryption = require('../adapter/adapterEncryption');
 const AdapterToken = require('../../authentication/adapter/adapterToken');
 const enumHelperCustomer = require('../../../helpers/enumHelperCustomer');
-const logger = require('../../../config/logger');
 const {
   created, conflict, serverError, OK,
 } = require('../../../protocols/https');

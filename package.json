@@ -9,6 +9,10 @@
     "migration": "npx sequelize-cli db:migrate",
     "migration:create": "npx sequelize-cli migration:generate --name"
   },
+  "_moduleAliases": {
+    "@root": ".",
+    "@config": "./src/config"
+  },
   "pre-commit": [
     "test"
   ],
@@ -35,6 +39,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^10.0.0",
+    "module-alias": "^2.2.2",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.19",
