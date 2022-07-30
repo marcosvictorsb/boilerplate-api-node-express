@@ -1,7 +1,7 @@
-const UserRepository = require('../repositories/customer-repository');
+const CustomerRepository = require('../repositories/customer-repository');
 const AdapterEncryption = require('../adapter/adapterEncryption');
 const AdapterToken = require('../../authentication/adapter/adapterToken');
-const enumHelperUser = require('../../../helpers/enumHelperUser');
+const enumHelperCustomer = require('../../../helpers/enumHelperCustomer');
 const logger = require('../../../config/logger');
 const {
   created, conflict, serverError, OK,
@@ -9,37 +9,37 @@ const {
 
 class CustomerService {
   constructor(params = {}) {
-    this.repository = params.repository || new UserRepository();
-    this.enumHelperUser = params.enumHelperUser || enumHelperUser;
+    this.repository = params.repository || new CustomerRepository();
+    this.enumHelperCustomer = params.enumHelperCustomer || enumHelperCustomer;
     this.logger = params.logger || logger;
     this.adapterEncryption = params.adapterEncryption || AdapterEncryption;
     this.adapterToken = params.adapterToken || AdapterToken;
   }
 
-  async create(user) {
+  async create(params) {
     try {
-      const { name, email, password } = user;
+      const { name, email, password } = params;
 
-      const userAlreadyExists = await this.repository.getByEmail(email);
-      if (userAlreadyExists) {
-        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperUser.user.alreadyExists} : ${email}`);
-        return conflict(this.enumHelperUser.user.alreadyExists);
+      const customerExists = await this.repository.getByEmail(email);
+      if (customerExists.length) {
+        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperCustomer.customer.alreadyExists} : ${email}`);
+        return conflict(this.enumHelperCustomer.customer.alreadyExists);
       }
 
-      const newUser = {
+      const newCustomer = {
         name,
         email,
-        passwordEncryption: this.adapterEncryption.generateHashPassword(password),
+        password: this.adapterEncryption.generateHashPassword(password),
       };
-      const result = await this.repository.create(newUser);
-      if (!result) {
-        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperUser.user.errorToCreateUser}`);
-        return conflict(this.enumHelperUser.user.errorToCreateUser);
+      const customer = await this.repository.create(newCustomer);
+      if (!customer) {
+        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperCustomer.customer.errorToCreateUser}`);
+        return conflict(this.enumHelperCustomer.customer.errorToCreateUser);
       }
 
-      const userCreated = this.removePassword(result);
-      userCreated.token = this.adapterToken.sign(user.id);
-      return created(userCreated);
+      const customerCreated = this.removePassword(customer);
+      customerCreated.token = this.adapterToken.sign(customerCreated.id);
+      return created(customerCreated);
     } catch (error) {
       this.logger.info('[CUSTOMER SERVICE] - error to create user');
       return serverError(error.message);
@@ -47,19 +47,19 @@ class CustomerService {
   }
 
   /* eslint-disable */
-  removePassword(user) {
-    user.passwordEncryption = undefined;
-    return user;
+  removePassword(customer) {
+    customer.password = undefined;
+    return customer;
   }
 
   async getByEmail(email) {
     try {
-      const user = await this.repository.getByEmail(email);
-      if (!user) {
+      const customer = await this.repository.getByEmail(email);
+      if (!customer) {
         this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
-        return conflict(this.enumHelperUser.user.notFoundUser);
+        return conflict(this.enumHelperCustomer.customer.notFoundUser);
       }
-      return OK(user);
+      return OK(customer);
     } catch (error) {
       this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
       return serverError(error.message);
@@ -71,7 +71,7 @@ class CustomerService {
       const result = this.adapterEncryption.comparePasswords(password, userPassword);
       if (!result) {
         this.logger.info('[CUSTOMER SERVICE] - [COMPARE PASSWORD] - password mismatch');
-        conflict(this.enumHelperUser.user.mismatchPassword);
+        conflict(this.enumHelperCustomer.customer.mismatchPassword);
       }
 
       return OK(result);
@@ -86,7 +86,7 @@ class CustomerService {
       const customers = await this.repository.getAllCustomers();
       if (!customers) {
         this.logger.info('[CUSTOMER SERVICE] - doesn\'t customers registered');
-        conflict(this.enumHelperUser.user.doNotCustomersRegistered);
+        conflict(this.enumHelperCustomer.customer.doNotCustomersRegistered);
       }
 
       return OK(customers);
