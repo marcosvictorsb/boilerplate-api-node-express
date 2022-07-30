@@ -1,5 +1,5 @@
 const { conflict, OK, serverError } = require('../../../protocols/https');
-const enumHelperCustomer = require('../../../helpers/enumHelperUser');
+const enumHelperCustomer = require('../../../helpers/enumHelperCustomer');
 const CustomerService = require('../../customers/services/customer-service');
 const logger = require('../../../config/logger');
 const AdapterToken = require('../adapter/adapterToken');
@@ -19,14 +19,14 @@ class AuthenticationService {
       const { result: user } = result.body;
       if (!user) {
         this.logger.info(`User not found with email ${email}`);
-        return conflict(this.enumHelperCustomer.user.notFoundUser);
+        return conflict(this.enumHelperCustomer.customer.notFoundUser);
       }
 
       const isCompare = await this.customerService
         .comparePasswords(password, user.passwordEncryption);
       if (!isCompare) {
         this.logger.info('the password is incorrect');
-        return conflict(this.enumHelperCustomer.user.emailOrPassword);
+        return conflict(this.enumHelperCustomer.customer.emailOrPassword);
       }
       /* eslint-disable no-param-reassign */
       user.passwordEncryption = undefined;
