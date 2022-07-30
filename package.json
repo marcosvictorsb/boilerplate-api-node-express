@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "test": "mocha './test/**/*test.js'",
-    "migrations": "npx sequelize-cli db:migrate"
+    "migration": "npx sequelize-cli db:migrate",
+    "migration:create": "npx sequelize-cli migration:generate --name"
   },
   "pre-commit": [
     "test"
