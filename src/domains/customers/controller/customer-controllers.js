@@ -23,7 +23,7 @@ class CustomerController extends Controller {
 
   async getByEmail(request, response) {
     try {
-      const { email } = request.body;
+      const { email } = request.query;
       const result = await this.service.getByEmail(email);
       return response.status(result.status).json(result.body);
     } catch (error) {

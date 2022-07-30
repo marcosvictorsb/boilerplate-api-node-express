@@ -54,11 +54,12 @@ class CustomerService {
 
   async getByEmail(email) {
     try {
-      const customer = await this.repository.getByEmail(email);
+      let customer = await this.repository.getByEmail(email);
       if (!customer) {
         this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
         return conflict(this.enumHelperCustomer.customer.notFoundUser);
       }
+      customer = this.removePassword(customer);
       return OK(customer);
     } catch (error) {
       this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
