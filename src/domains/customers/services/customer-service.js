@@ -24,7 +24,7 @@ class CustomerService {
       const newCustomer = {
         name,
         email,
-        password: this.adapterEncryption.generateHashPassword(password),
+        password: await this.adapterEncryption.generateHashPassword(password),
       };
       const customer = await this.repository.create(newCustomer);
       if (!customer) {
