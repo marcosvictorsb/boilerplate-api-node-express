@@ -98,4 +98,11 @@ describe('CUSTOMER SERVICE', () => {
       expect(result.status).to.eq(HttpStatusCode.serverError);
     });
   });
+
+  describe('REMOVE PASSWORD', () => {
+    it('return customer.password equal to undefined', async () => {
+      const newCustomer = this.service.removePassword(this.customer);
+      expect(newCustomer.password).to.eq(undefined);
+    })
+  })
 });
