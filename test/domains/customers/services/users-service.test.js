@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { stub, assert } = require('sinon');
+const { stub, assert: { calledOnce, calledWith } } = require('sinon');
 
 const logger = require('../../../../src/config/logger');
 const CustomerRepository = require('../../../../src/domains/customers/repositories/customer-repository');
@@ -46,21 +46,21 @@ describe('CUSTOMER SERVICE', () => {
 
       const result = await this.service.create(this.customer);
 
-      assert.calledOnce(this.service.repository.getByEmail);
-      assert.calledWith(this.service.repository.getByEmail, this.customer.email);
-      assert.calledOnce(this.service.logger.info);
+      calledOnce(this.service.repository.getByEmail);
+      calledWith(this.service.repository.getByEmail, this.customer.email);
+      calledOnce(this.service.logger.info);
       expect(result.status).to.eq(HttpStatusCode.Conflict);
     });
 
     it('return status code 409 when repository create result rejected', async () => {
       const result = await this.service.create(this.customer);
 
-      assert.calledOnce(this.service.repository.getByEmail);
-      assert.calledWith(this.service.repository.getByEmail, this.customer.email);
-      assert.calledOnce(this.service.adapterEncryption.generateHashPassword)
-      assert.calledWith(this.service.adapterEncryption.generateHashPassword,
+      calledOnce(this.service.repository.getByEmail);
+      calledWith(this.service.repository.getByEmail, this.customer.email);
+      calledOnce(this.service.adapterEncryption.generateHashPassword)
+      calledWith(this.service.adapterEncryption.generateHashPassword,
         this.customer.password)
-      assert.calledOnce(this.service.repository.create);
+      calledOnce(this.service.repository.create);
       expect(result.status).to.eq(HttpStatusCode.Conflict);
     });
 
@@ -69,13 +69,13 @@ describe('CUSTOMER SERVICE', () => {
 
       await this.service.create(this.customer);
 
-      assert.calledOnce(this.service.repository.getByEmail);
-      assert.calledWith(this.service.repository.getByEmail, this.customer.email);
-      assert.calledOnce(this.service.adapterEncryption.generateHashPassword);
-      assert.calledWith(this.service.adapterEncryption.generateHashPassword,
+      calledOnce(this.service.repository.getByEmail);
+      calledWith(this.service.repository.getByEmail, this.customer.email);
+      calledOnce(this.service.adapterEncryption.generateHashPassword);
+      calledWith(this.service.adapterEncryption.generateHashPassword,
         this.customer.password);
-      assert.calledOnce(this.service.repository.create);
-      assert.calledWith(this.service.repository.create, this.customer);
+      calledOnce(this.service.repository.create);
+      calledWith(this.service.repository.create, this.customer);
     });
 
     it('return status code 500 when happen in the moment to get customer by email', async () => {
@@ -83,8 +83,8 @@ describe('CUSTOMER SERVICE', () => {
 
       const result = await this.service.create(this.customer);
 
-      assert.calledOnce(this.service.repository.getByEmail);
-      assert.calledWith(this.service.repository.getByEmail, this.customer.email);
+      calledOnce(this.service.repository.getByEmail);
+      calledWith(this.service.repository.getByEmail, this.customer.email);
       expect(result.status).to.eq(HttpStatusCode.serverError);
     });
 
@@ -93,8 +93,8 @@ describe('CUSTOMER SERVICE', () => {
 
       const result = await this.service.create(this.customer);
 
-      assert.calledOnce(this.service.repository.getByEmail);
-      assert.calledWith(this.service.repository.getByEmail, this.customer.email);
+      calledOnce(this.service.repository.getByEmail);
+      calledWith(this.service.repository.getByEmail, this.customer.email);
       expect(result.status).to.eq(HttpStatusCode.serverError);
     });
   });
