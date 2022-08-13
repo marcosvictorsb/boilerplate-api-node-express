@@ -21,7 +21,7 @@ describe('CUSTOMER SERVICE', () => {
     });
 
     this.service.adapterEncryption = {
-      generateHashPassword: stub().resolves('encryption_password'),
+      generateHashPassword: stub().returns('encryption_password'),
     }
 
     this.customer = {
@@ -31,7 +31,7 @@ describe('CUSTOMER SERVICE', () => {
     };
 
     this.service.repository = {
-      getByEmail: stub().resolves([]),
+      getByEmail: stub().resolves(undefined),
       create: stub().resolves(undefined),
     };
 
@@ -103,6 +103,37 @@ describe('CUSTOMER SERVICE', () => {
     it('return customer.password equal to undefined', async () => {
       const newCustomer = this.service.removePassword(this.customer);
       expect(newCustomer.password).to.eq(undefined);
+    })
+  })
+
+  describe('GET BY EMAIL', () => {
+    it('return conflict when already customer with same email', async () => {
+      const result = await this.service.getByEmail(this.customer.email);
+      expect(result.status).to.eq(HttpStatusCode.Conflict);
+    })
+
+    it('return customer with same email customer.email', async () => {
+      const expected = { result: { name: 'any_name', password: undefined } }
+      this.service.repository.getByEmail = stub().resolves({ name: 'any_name', password: 'any_password' });
+
+      await this.service.getByEmail(this.customer.email);
+
+      calledOnce(this.service.repository.getByEmail)
+      calledWith(this.service.repository.getByEmail, this.customer.email)
+    })
+  })
+
+  describe('COMPARE PASSWORD', () => {
+    beforeEach(() => {
+      this.passwordOne = 'any_password_one';
+      this.passwordTwo = 'any_password_two';
+    })
+    it('Error to compare password', async () => {
+      this.service.adapterEncryption.comparePasswords = stub().returns(undefined);
+
+      this.service.comparePasswords(this.passwordOne, this.passwordTwo)
+
+      calledOnce(this.service.logger.info)
     })
   })
 });

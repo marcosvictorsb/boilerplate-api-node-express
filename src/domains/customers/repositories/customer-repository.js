@@ -19,7 +19,7 @@ class CustomerRepository {
   async getByEmail(email) {
     try {
       const customer = await this.model.findAll({ where: { email } });
-      return customer[0].dataValues;
+      return customer[0] ? customer[0].dataValues : undefined;
     } catch (error) {
       this.logger.error('[CUSTOMER REPOSITORY] - error to get customer by email');
       return serverError(error.message);

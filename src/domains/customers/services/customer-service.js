@@ -16,7 +16,7 @@ class CustomerService {
       const { name, email, password } = params;
 
       const customerExists = await this.repository.getByEmail(email);
-      if (customerExists.length) {
+      if (customerExists) {
         this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperCustomer.customer.alreadyExists} : ${email}`);
         return conflict(this.enumHelperCustomer.customer.alreadyExists);
       }
