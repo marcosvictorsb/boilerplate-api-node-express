@@ -14,7 +14,7 @@ class AuthenticationService {
       const { result: customer } = result.body;
       if (!customer) {
         this.logger.info(`User not found with email ${email}`);
-        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.customer.notFoundUser);
+        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.notFoundUser);
       }
 
       const isCompare = await this.customerService
@@ -22,7 +22,7 @@ class AuthenticationService {
       if (!isCompare) {
         this.logger.info('[AuthenticationService] - the password is incorrect');
         return this.httpResponseStatusCode
-          .conflict(this.enumHelperCustomer.customer.emailOrPassword);
+          .conflict(this.enumHelperCustomer.emailOrPassword);
       }
       /* eslint-disable no-param-reassign */
       customer.password = undefined;
