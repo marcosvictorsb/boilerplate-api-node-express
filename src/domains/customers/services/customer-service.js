@@ -78,7 +78,6 @@ class CustomerService {
         this.logger.info('[CUSTOMER SERVICE] - doesn\'t customers registered');
         conflict(this.enumHelperCustomer.customer.doNotCustomersRegistered);
       }
-
       return OK(customers);
     } catch (error) {
       this.logger.error('[CUSTOMER SERVICE] - intern error to get all customers');
