@@ -1,4 +1,4 @@
-const { serverError } = require('../../../protocols/https');
+const { serverError } = require('../../../protocols/httpResponseStatusCodes');
 
 class CustomerRepository {
   constructor(params = {}) {

@@ -1,5 +1,5 @@
 const Controller = require('../../../interfaces/base-controller');
-const { serverError } = require('../../../protocols/https');
+const { serverError } = require('../../../protocols/httpResponseStatusCodes');
 
 class CustomerController extends Controller {
   constructor(params = {}) {

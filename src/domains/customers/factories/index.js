@@ -7,7 +7,7 @@ const AdapterToken = require('../../authentication/adapter/adapterToken');
 const CustomerModel = require('../../../infra/database/models/customers');
 const logger = require('../../../config/logger');
 const { customer: enumHelperCustomer } = require('../../../helpers/enumHelperCustomer');
-const { HttpResponseStatusCodes } = require('../../../protocols/https');
+const { HttpResponseStatusCodes } = require('../../../protocols/httpResponseStatusCodes');
 
 const getRepository = () => new CustomerRepository({ logger, model: CustomerModel });
 

@@ -7,7 +7,7 @@ const { customer: enumHelperCustomer } = require('../../../helpers/enumHelperCus
 const enumHelperAuthentication = require('../../../helpers/enumHelperAuthentication');
 const logger = require('../../../config/logger');
 const AdapterToken = require('../adapter/adapterToken');
-const { HttpResponseStatusCodes } = require('../../../protocols/https');
+const { HttpResponseStatusCodes } = require('../../../protocols/httpResponseStatusCodes');
 
 const getService = (params = {}) => new AuthenticationService({
   enumHelperCustomer: params.enumHelperCustomer || enumHelperCustomer,
