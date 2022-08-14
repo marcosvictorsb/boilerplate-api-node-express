@@ -1,7 +1,6 @@
 const CustomerRepository = require('../../../../src/domains/customers/repositories/customer-repository');
 const { expect } = require('chai');
 const { stub, assert: { calledOnce, calledWith, notCalled } } = require('sinon');
-const { HttpStatusCode } = require('../../../../src/protocols/https');
 const { getService } = require('../../../../src/domains/customers/factories')
 
 describe('CUSTOMER SERVICE', () => {
@@ -31,6 +30,7 @@ describe('CUSTOMER SERVICE', () => {
       conflict: stub().returns(),
       serverError: stub().returns(),
       created: stub().returns(),
+      OK: stub().returns(),
     }
 
     this.customer = {
@@ -61,9 +61,12 @@ describe('CUSTOMER SERVICE', () => {
   });
 
   describe('CREATE', () => {
+    beforeEach(() => {
+      this.service.removePassword = stub().returns();
+    })
+
     it('call conflict (status code 409) when exist customer with same email', async () => {
       this.service.repository.getByEmail = stub().resolves([{ name: 'any_name' }]);
-      this.service.removePassword = stub().returns();
 
       await this.service.create(this.customer);
 
@@ -82,8 +85,6 @@ describe('CUSTOMER SERVICE', () => {
     });
 
     it('call conflict (status code 409) when repository.create not return customer created', async () => {
-      this.service.removePassword = stub().resolves();
-
       await this.service.create(this.customer);
 
       calledOnce(this.service.repository.getByEmail);
@@ -128,7 +129,6 @@ describe('CUSTOMER SERVICE', () => {
 
     it('call serverError (status code 500) when repository.getByEmail rejects', async () => {
       this.service.repository.getByEmail = stub().rejects();
-      this.service.removePassword = stub().resolves();
 
       await this.service.create(this.customer);
 
@@ -148,8 +148,6 @@ describe('CUSTOMER SERVICE', () => {
     it('call serverError (status code 500) when adapterEncryption.generateHashPassword rejects', async () => {
       this.service.adapterEncryption.generateHashPassword = stub().rejects();
 
-      this.service.removePassword = stub().resolves();
-
       await this.service.create(this.customer);
 
       calledOnce(this.service.repository.getByEmail);
@@ -167,7 +165,6 @@ describe('CUSTOMER SERVICE', () => {
 
     it('call serverError (status code 500) when repository.create rejects', async () => {
       this.service.repository.create = stub().rejects();
-      this.service.removePassword = stub().resolves();
 
       await this.service.create(this.customer);
 
@@ -187,8 +184,7 @@ describe('CUSTOMER SERVICE', () => {
 
     it('call serverError (status code 500) when adapterToken.sign rejects', async () => {
       this.service.adapterToken.sign = stub().rejects();
-      this.service.repository.create = stub().resolves(this.customer)
-      this.service.removePassword = stub().returns();
+      this.service.repository.create = stub().resolves(this.customer);
 
       await this.service.create(this.customer);
 
@@ -208,56 +204,84 @@ describe('CUSTOMER SERVICE', () => {
     });
   });
 
-  // describe('REMOVE PASSWORD', () => {
-  //   it('return customer.password equal to undefined', async () => {
-  //     const newCustomer = this.service.removePassword(this.customer);
-  //     expect(newCustomer.password).to.eq(undefined);
-  //   })
-  // })
+  describe('REMOVE PASSWORD', () => {
+    it('return customer.password equal to undefined', async () => {
+      const newCustomer = this.service.removePassword(this.customer);
+      expect(newCustomer.password).to.eq(undefined);
+    })
+  })
 
-  // describe('GET BY EMAIL', () => {
-  //   it('return conflict when already customer with same email', async () => {
-  //     const result = await this.service.getByEmail(this.customer.email);
-  //     expect(result.status).to.eq(HttpStatusCode.Conflict);
-  //   })
+  describe('GET BY EMAIL', () => {
+    it('return conflict (status code 409) when not return customer', async () => {
+      await this.service.getByEmail(this.customer.email);
 
-  //   it('return customer with same email customer.email', async () => {
-  //     const expected = { result: { name: 'any_name', password: undefined } }
-  //     this.service.repository.getByEmail = stub().resolves({ name: 'any_name', password: 'any_password' });
+      calledOnce(this.service.repository.getByEmail);
+      calledWith(this.service.repository.getByEmail, this.customer.email);
+      calledOnce(this.service.logger.info);
+      calledOnce(this.service.httpResponseStatusCode.conflict);
+      calledWith(this.service.httpResponseStatusCode.conflict,
+        this.service.enumHelperCustomer.notFoundUser);
+      notCalled(this.service.httpResponseStatusCode.OK);
+      notCalled(this.service.logger.error);
+      notCalled(this.service.httpResponseStatusCode.serverError);
+    })
 
-  //     await this.service.getByEmail(this.customer.email);
+    it('call OK (status code 200) when return customer', async () => {
+      this.service.repository.getByEmail = stub().resolves(this.customer);
 
-  //     calledOnce(this.service.repository.getByEmail)
-  //     calledWith(this.service.repository.getByEmail, this.customer.email)
-  //   })
-  // })
+      await this.service.getByEmail(this.customer.email);
 
-  // describe('IS COMPARE PASSWORD', () => {
-  //   beforeEach(() => {
-  //     this.passwordOne = 'any_password_one';
-  //     this.passwordTwo = 'any_password_two';
-  //   })
-  //   it('Call log.info to info that happen error to compare password', async () => {
-  //     this.service.adapterEncryption.comparePasswords = stub().returns(false);
+      calledOnce(this.service.repository.getByEmail);
+      calledWith(this.service.repository.getByEmail, this.customer.email);
 
-  //     const isComparePassword = this.service.isComparePasswords(this.passwordOne, this.passwordTwo)
+      notCalled(this.service.logger.info);
+      notCalled(this.service.httpResponseStatusCode.conflict);
+      calledOnce(this.service.httpResponseStatusCode.OK);
+      calledWith(this.service.httpResponseStatusCode.OK, this.customer);
+      notCalled(this.service.logger.error);
+      notCalled(this.service.httpResponseStatusCode.serverError);
+    })
 
-  //     expect(isComparePassword).to.be.false;
-  //   })
+    it('call serverError (status code 500) when repository.getByEmail rejects', async () => {
+      this.service.repository.getByEmail = stub().rejects();
 
-  //   it('Call log.error to info that happen error to compare password', async () => {
-  //     this.service.adapterEncryption.comparePasswords = stub().returns(true);
+      await this.service.getByEmail(this.customer.email);
 
-  //     const isComparePassword = this.service.isComparePasswords(this.passwordOne, this.passwordTwo)
+      calledOnce(this.service.repository.getByEmail);
+      calledWith(this.service.repository.getByEmail, this.customer.email);
 
-  //     expect(isComparePassword).to.be.true;
-  //   })
-  // })
+      notCalled(this.service.logger.info);
+      notCalled(this.service.httpResponseStatusCode.conflict);
+      notCalled(this.service.httpResponseStatusCode.OK);
+      calledOnce(this.service.logger.error);
+      calledOnce(this.service.httpResponseStatusCode.serverError);
 
-  // describe('GET ALL CUSTOMERS', () => {
-  //   it('return conflict when not have customer', async () => {
+    })
+  })
 
-  //     const customer = await this.service.getAllCustomers();
-  //   })
-  // })
+  describe('IS COMPARE PASSWORD', () => {
+    beforeEach(() => {
+      this.passwordOne = 'any_password_one';
+      this.passwordTwo = 'any_password_two';
+    })
+    it('return false when passwordOne is different than passwordTwo', async () => {
+      this.service.adapterEncryption.comparePasswords = stub().returns(false);
+
+      const isComparePassword = this.service.isComparePasswords(this.passwordOne, this.passwordTwo)
+
+      expect(isComparePassword).to.be.false;
+      notCalled(this.service.logger.error);
+      notCalled(this.service.httpResponseStatusCode.serverError);
+    })
+
+    it('return false when passwordOne is equal to passwordTwo', async () => {
+      this.service.adapterEncryption.comparePasswords = stub().returns(true);
+
+      const isComparePassword = this.service.isComparePasswords(this.passwordOne, this.passwordTwo)
+
+      expect(isComparePassword).to.be.true;
+      notCalled(this.service.logger.error);
+      notCalled(this.service.httpResponseStatusCode.serverError);
+    })
+  })
 });
