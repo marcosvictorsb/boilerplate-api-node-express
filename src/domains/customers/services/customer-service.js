@@ -54,7 +54,6 @@ class CustomerService {
         this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
         return conflict(this.enumHelperCustomer.customer.notFoundUser);
       }
-      customer = this.removePassword(customer);
       return OK(customer);
     } catch (error) {
       this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
@@ -62,15 +61,10 @@ class CustomerService {
     }
   }
 
-  comparePasswords(password, userPassword) {
+  isComparePasswords(password, userPassword) {
     try {
-      const result = this.adapterEncryption.comparePasswords(password, userPassword);
-      if (!result) {
-        this.logger.info('[CUSTOMER SERVICE] - [COMPARE PASSWORD] - password mismatch');
-        conflict(this.enumHelperCustomer.customer.mismatchPassword);
-      }
-
-      return OK(result);
+      const isComparePassword = this.adapterEncryption.comparePasswords(password, userPassword);
+      return isComparePassword ? true : false;
     } catch (error) {
       this.logger.error('[CUSTOMER SERVICE] - [COMPARE PASSWORD] - password mismatch');
       return serverError(error.message);

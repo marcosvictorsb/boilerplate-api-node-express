@@ -7,6 +7,7 @@ class AuthenticationController extends Controller {
     this.validator = params.validator;
     this.customerService = params.customerService;
     this.enumHelperCustomer = params.enumHelperCustomer;
+    this.enumHelperAuthentication = params.enumHelperAuthentication;
     this.logger = params.logger;
   }
 

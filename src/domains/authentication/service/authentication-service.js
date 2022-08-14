@@ -19,7 +19,7 @@ class AuthenticationService {
       }
 
       const isCompare = await this.customerService
-        .comparePasswords(password, customer.password);
+        .isComparePasswords(password, customer.password);
       if (!isCompare) {
         this.logger.info('the password is incorrect');
         return conflict(this.enumHelperCustomer.customer.emailOrPassword);

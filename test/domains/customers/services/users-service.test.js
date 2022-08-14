@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { stub, assert: { calledOnce, calledWith } } = require('sinon');
+const { stub, assert: { calledOnce, calledWith, notCalled } } = require('sinon');
 
 const logger = require('../../../../src/config/logger');
 const CustomerRepository = require('../../../../src/domains/customers/repositories/customer-repository');
@@ -37,6 +37,7 @@ describe('CUSTOMER SERVICE', () => {
 
     this.service.logger = {
       info: stub().resolves(),
+      error: stub().resolves(),
     };
   });
 
@@ -128,12 +129,20 @@ describe('CUSTOMER SERVICE', () => {
       this.passwordOne = 'any_password_one';
       this.passwordTwo = 'any_password_two';
     })
-    it('Error to compare password', async () => {
-      this.service.adapterEncryption.comparePasswords = stub().returns(undefined);
+    it('Call log.info to info that happen error to compare password', async () => {
+      this.service.adapterEncryption.comparePasswords = stub().returns(false);
 
-      this.service.comparePasswords(this.passwordOne, this.passwordTwo)
+      const isComparePassword = this.service.isComparePasswords(this.passwordOne, this.passwordTwo)
 
-      calledOnce(this.service.logger.info)
+      expect(isComparePassword).to.be.false;
+    })
+
+    it('Call log.error to info that happen error to compare password', async () => {
+      this.service.adapterEncryption.comparePasswords = stub().returns(true);
+
+      const isComparePassword = this.service.isComparePasswords(this.passwordOne, this.passwordTwo)
+
+      expect(isComparePassword).to.be.true;
     })
   })
 });
