@@ -50,23 +50,18 @@ class CustomerService {
       let customer = await this.repository.getByEmail(email);
       if (!customer) {
         this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
-        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.customer.notFoundUser);
+        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.notFoundUser);
       }
       return this.httpResponseStatusCode.OK(customer);
     } catch (error) {
-      this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
+      this.logger.error('[CUSTOMER SERVICE] - error to get user by email');
       return this.httpResponseStatusCode.serverError(error.message);
     }
   }
 
   isComparePasswords(password, userPassword) {
-    try {
-      const isComparePassword = this.adapterEncryption.comparePasswords(password, userPassword);
-      return isComparePassword ? true : false;
-    } catch (error) {
-      this.logger.error('[CUSTOMER SERVICE] - [COMPARE PASSWORD] - password mismatch');
-      return this.httpResponseStatusCode.serverError(error.message);
-    }
+    const isComparePassword = this.adapterEncryption.comparePasswords(password, userPassword);
+    return isComparePassword
   }
 
   async getAllCustomers() {
@@ -74,7 +69,7 @@ class CustomerService {
       const customers = await this.repository.getAllCustomers();
       if (!customers) {
         this.logger.info('[CUSTOMER SERVICE] - doesn\'t customers registered');
-        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.customer.doNotCustomersRegistered);
+        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.doNotCustomersRegistered);
       }
       return this.httpResponseStatusCode.OK(customers);
     } catch (error) {
