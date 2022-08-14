@@ -6,7 +6,8 @@ const AdapterEncryption = require('../adapter/adapterEncryption');
 const AdapterToken = require('../../authentication/adapter/adapterToken');
 const CustomerModel = require('../../../infra/database/models/customers');
 const logger = require('../../../config/logger');
-const enumHelperCustomer = require('../../../helpers/enumHelperCustomer');
+const { customer: enumHelperCustomer } = require('../../../helpers/enumHelperCustomer');
+const { HttpResponseStatusCodes } = require('../../../protocols/https');
 
 const getRepository = () => new CustomerRepository({ logger, model: CustomerModel });
 
@@ -17,6 +18,7 @@ const getService = (params = {}) => new CustomerService({
   validator: params.validator || new CustomerValidator(),
   adapterEncryption: params.adapterEncryption || AdapterEncryption,
   adapterToken: params.adapterToken || new AdapterToken(),
+  httpResponseStatusCode: params.httpResponseStatusCode || new HttpResponseStatusCodes(),
 });
 
 const getController = (params = {}) => new CustomerController({

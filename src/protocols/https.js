@@ -7,42 +7,60 @@ const HttpStatusCode = {
   serverError: 500,
 };
 
-const OK = (response) => ({
-  status: HttpStatusCode.OK,
-  body: { result: response },
-});
+class HttpResponseStatusCodes {
+  constructor() {
+    this.statusCodeOK = 200;
+    this.statusCodeCreated = 201;
+    this.statusCodeNoContent = 204;
+    this.statusCodeNotFound = 404;
+    this.statusCodeConflict = 409;
+    this.statusCodeServerError = 500;
+  }
 
-const conflict = (error) => ({
-  status: HttpStatusCode.Conflict,
-  body: { error },
-});
+  OK(response) {
+    return {
+      status: this.statusCodeOK,
+      body: { result: response },
+    };
+  }
 
-const noContent = (message) => ({
-  status: HttpStatusCode.noContent,
-  body: { result: message },
-});
+  conflict(error) {
+    return {
+      status: this.statusCodeConflict,
+      body: { error },
+    };
+  }
 
-const created = (response) => ({
-  status: HttpStatusCode.Created,
-  body: { result: response },
-});
+  noContent(message) {
+    return {
+      status: this.statusCodeNoContent,
+      body: { result: message },
+    };
+  }
 
-const notFound = (response) => ({
-  status: HttpStatusCode.notFound,
-  body: { result: response },
-});
+  created(response) {
+    return {
+      status: this.statusCodeCreated,
+      body: { result: response },
+    };
+  }
 
-const serverError = (error) => ({
-  status: HttpStatusCode.serverError,
-  body: { error },
-});
+  notFound(response) {
+    return {
+      status: this.statusCodeNotFound,
+      body: { result: response },
+    };
+  }
+
+  static serverError(error) {
+    return {
+      status: this.statusCodeServerError,
+      body: { error },
+    };
+  }
+}
 
 module.exports = {
   HttpStatusCode,
-  created,
-  conflict,
-  serverError,
-  notFound,
-  OK,
-  noContent,
+  HttpResponseStatusCodes,
 };

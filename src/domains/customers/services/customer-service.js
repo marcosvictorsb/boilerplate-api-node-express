@@ -1,7 +1,3 @@
-const {
-  created, conflict, serverError, OK,
-} = require('../../../protocols/https');
-
 class CustomerService {
   constructor(params = {}) {
     this.repository = params.repository;
@@ -9,16 +5,16 @@ class CustomerService {
     this.logger = params.logger;
     this.adapterEncryption = params.adapterEncryption;
     this.adapterToken = params.adapterToken;
+    this.httpResponseStatusCode = params.httpResponseStatusCode;
   }
 
   async create(params) {
     try {
       const { name, email, password } = params;
-
       const customerExists = await this.repository.getByEmail(email);
       if (customerExists) {
-        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperCustomer.customer.alreadyExists} : ${email}`);
-        return conflict(this.enumHelperCustomer.customer.alreadyExists);
+        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperCustomer.alreadyExists} : ${email}`);
+        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.alreadyExists);
       }
 
       const newCustomer = {
@@ -26,18 +22,20 @@ class CustomerService {
         email,
         password: await this.adapterEncryption.generateHashPassword(password),
       };
+
       const customer = await this.repository.create(newCustomer);
+
       if (!customer) {
-        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperCustomer.customer.errorToCreateUser}`);
-        return conflict(this.enumHelperCustomer.customer.errorToCreateUser);
+        this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperCustomer.errorToCreateUser}`);
+        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.errorToCreateUser);
       }
 
       const customerCreated = this.removePassword(customer);
       customerCreated.token = this.adapterToken.sign(customerCreated.id);
-      return created(customerCreated);
+      return this.httpResponseStatusCode.created(customerCreated);
     } catch (error) {
-      this.logger.info('[CUSTOMER SERVICE] - error to create user');
-      return serverError(error.message);
+      this.logger.error('[CUSTOMER SERVICE] - error to create user');
+      return this.httpResponseStatusCode.serverError(error.message);
     }
   }
 
@@ -52,12 +50,12 @@ class CustomerService {
       let customer = await this.repository.getByEmail(email);
       if (!customer) {
         this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
-        return conflict(this.enumHelperCustomer.customer.notFoundUser);
+        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.customer.notFoundUser);
       }
-      return OK(customer);
+      return this.httpResponseStatusCode.OK(customer);
     } catch (error) {
       this.logger.info('[CUSTOMER SERVICE] - error to get user by email');
-      return serverError(error.message);
+      return this.httpResponseStatusCode.serverError(error.message);
     }
   }
 
@@ -67,7 +65,7 @@ class CustomerService {
       return isComparePassword ? true : false;
     } catch (error) {
       this.logger.error('[CUSTOMER SERVICE] - [COMPARE PASSWORD] - password mismatch');
-      return serverError(error.message);
+      return this.httpResponseStatusCode.serverError(error.message);
     }
   }
 
@@ -76,12 +74,12 @@ class CustomerService {
       const customers = await this.repository.getAllCustomers();
       if (!customers) {
         this.logger.info('[CUSTOMER SERVICE] - doesn\'t customers registered');
-        conflict(this.enumHelperCustomer.customer.doNotCustomersRegistered);
+        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.customer.doNotCustomersRegistered);
       }
-      return OK(customers);
+      return this.httpResponseStatusCode.OK(customers);
     } catch (error) {
       this.logger.error('[CUSTOMER SERVICE] - intern error to get all customers');
-      return serverError(error.message);
+      return this.httpResponseStatusCode.serverError(error.message);
     }
   }
 }

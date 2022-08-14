@@ -3,16 +3,18 @@ const AuthenticationValidator = require('../validator/authentication-validator')
 const AuthenticationService = require('../service/authentication-service');
 const { schema } = require('../validator/authentication-schema');
 const factoryCustomer = require('../../customers/factories/index');
-const enumHelperCustomer = require('../../../helpers/enumHelperCustomer');
+const { customer: enumHelperCustomer } = require('../../../helpers/enumHelperCustomer');
 const enumHelperAuthentication = require('../../../helpers/enumHelperAuthentication');
 const logger = require('../../../config/logger');
 const AdapterToken = require('../adapter/adapterToken');
+const { HttpResponseStatusCodes } = require('../../../protocols/https');
 
 const getService = (params = {}) => new AuthenticationService({
   enumHelperCustomer: params.enumHelperCustomer || enumHelperCustomer,
   customerService: params.customerService || factoryCustomer.getService(),
   logger: params.logger || logger,
   adapterToken: params.adapterToken || new AdapterToken(),
+  httpResponseStatusCode: params.httpResponseStatusCode || new HttpResponseStatusCodes(),
 });
 
 const getController = (params = {}) => new AuthenticationController({
