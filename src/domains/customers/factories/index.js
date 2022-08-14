@@ -16,7 +16,7 @@ const getService = (params = {}) => new CustomerService({
   logger: params.logger || logger,
   validator: params.validator || new CustomerValidator(),
   adapterEncryption: params.adapterEncryption || AdapterEncryption,
-  adapterToken: params.adapterToken || AdapterToken,
+  adapterToken: params.adapterToken || new AdapterToken(),
 });
 
 const getController = (params = {}) => new CustomerController({
