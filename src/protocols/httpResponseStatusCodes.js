@@ -52,7 +52,7 @@ class HttpResponseStatusCodes {
     };
   }
 
-  static serverError(error) {
+  serverError(error) {
     return {
       status: this.statusCodeServerError,
       body: { error },
