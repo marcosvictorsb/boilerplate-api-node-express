@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const CustomerService = require('../services/customer-service');
 const CustomerController = require('../controller/customer-controllers');
 const CustomerRepository = require('../repositories/customer-repository');
@@ -16,7 +17,7 @@ const getService = (params = {}) => new CustomerService({
   enumHelperCustomer: params.enumHelperCustomer || enumHelperCustomer,
   logger: params.logger || logger,
   validator: params.validator || new CustomerValidator(),
-  adapterEncryption: params.adapterEncryption || AdapterEncryption,
+  adapterEncryption: params.adapterEncryption || new AdapterEncryption({ bcrypt }),
   adapterToken: params.adapterToken || new AdapterToken(),
   httpResponseStatusCode: params.httpResponseStatusCode || new HttpResponseStatusCodes(),
 });

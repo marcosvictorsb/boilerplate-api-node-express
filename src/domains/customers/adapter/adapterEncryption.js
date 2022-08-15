@@ -1,16 +1,18 @@
-const bcrypt = require('bcryptjs');
-
 class AdapterEncryption {
-  static generateHashPassword(password) {
+  constructor(params = {}) {
+    this.bcrypt = params.bcrypt;
+  }
+
+  generateHashPassword(password) {
     const SALT_ROUNDS = 10;
-    const salt = bcrypt.genSaltSync(SALT_ROUNDS);
-    const hash = bcrypt.hashSync(password, salt);
+    const salt = this.bcrypt.genSaltSync(SALT_ROUNDS);
+    const hash = this.bcrypt.hashSync(password, salt);
 
     return hash;
   }
 
-  static comparePasswords(password1, password2) {
-    return bcrypt.compareSync(password1, password2);
+  comparePasswords(password1, password2) {
+    return this.bcrypt.compareSync(password1, password2);
   }
 }
 
