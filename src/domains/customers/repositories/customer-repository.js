@@ -1,9 +1,9 @@
-const { serverError } = require('../../../protocols/httpResponseStatusCodes');
-
+const FIRST_POSITION = 0;
 class CustomerRepository {
   constructor(params = {}) {
     this.logger = params.logger;
     this.model = params.model;
+    this.httpResponseStatusCode = params.httpResponseStatusCode;
   }
 
   async create(customer) {
@@ -12,17 +12,17 @@ class CustomerRepository {
       return customerCreated.dataValues;
     } catch (error) {
       this.logger.error('[CUSTOMER REPOSITORY] - error to create customer');
-      return serverError(error.message);
+      return this.httpResponseStatusCode.serverError(error.message);
     }
   }
 
   async getByEmail(email) {
     try {
       const customer = await this.model.findAll({ where: { email }, raw: true });
-      return customer[0];
+      return customer[FIRST_POSITION];
     } catch (error) {
       this.logger.error('[CUSTOMER REPOSITORY] - error to get customer by email');
-      return serverError(error.message);
+      return this.httpResponseStatusCode.serverError(error.message);
     }
   }
 
@@ -32,7 +32,7 @@ class CustomerRepository {
       return customers;
     } catch (error) {
       this.logger.error('[CUSTOMER REPOSITORY] - error to get all customers');
-      return serverError(error.message);
+      return this.httpResponseStatusCode.serverError(error.message);
     }
   }
 }

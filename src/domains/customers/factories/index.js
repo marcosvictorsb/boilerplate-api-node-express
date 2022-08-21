@@ -10,7 +10,11 @@ const logger = require('../../../config/logger');
 const { customer: enumHelperCustomer } = require('../../../helpers/enumHelperCustomer');
 const { HttpResponseStatusCodes } = require('../../../protocols/httpResponseStatusCodes');
 
-const getRepository = () => new CustomerRepository({ logger, model: CustomerModel });
+const getRepository = (params = {}) => new CustomerRepository({
+  logger,
+  model: CustomerModel,
+  httpResponseStatusCode: params.httpResponseStatusCode || new HttpResponseStatusCodes(),
+});
 
 const getService = (params = {}) => new CustomerService({
   repository: params.repository || getRepository(),
