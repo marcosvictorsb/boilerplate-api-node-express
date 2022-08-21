@@ -44,11 +44,10 @@ Running Locally
   npm run test
 ```
 
-## Units coverage
+## Units Tests Coverage
 ```bash
   # command to run coverage unit tests
-  npm run test:coverage'
-  image.png
+  npm run test:coverage
 ```
 
 
