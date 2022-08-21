@@ -44,6 +44,15 @@ Running Locally
   npm run test
 ```
 
+## Units coverage
+```bash
+  # command to run coverage unit tests
+  npm run test:coverage'
+  image.png
+```
+
+
+
 
 ## Project Structure
 ```bash
