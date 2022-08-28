@@ -84,13 +84,12 @@ class CustomerService {
       const result = await this.getByEmail(emailCustomer);
       const customer = result.body.result;
       if (!customer) {
-        return this.httpResponseStatusCode.conflict('user not found');
+        return this.httpResponseStatusCode.conflict(this.enumHelperCustomer.notFoundUser);
       }
       const { name, email } = customer;
       const sendEmail = await this.emailService.sendEmailForgetPassword(name, email)
       return this.httpResponseStatusCode.OK(sendEmail);
     } catch (error) {
-      console.log(error)
       this.logger.error('[CUSTOMER SERVICE] - error to get user by email');
       return this.httpResponseStatusCode.serverError(error.message);
     }

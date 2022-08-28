@@ -25,6 +25,7 @@ describe('CUSTOMER CONTROLLER', () => {
       create: stub().resolves({}),
       getByEmail: stub().resolves({}),
       getAllCustomers: stub().resolves({}),
+      forgetPassword: stub().resolves({}),
     }
 
     this.controller.logger = {
@@ -130,6 +131,30 @@ describe('CUSTOMER CONTROLLER', () => {
       await this.controller.getAllCustomers(this.request, this.response);
 
       calledOnce(this.controller.service.getAllCustomers);
+      calledOnce(this.response.status);
+      calledOnce(this.response.json);
+      notCalled(this.controller.logger.error);
+      notCalled(this.controller.errorHandler);
+    })
+  })
+
+  describe('FORGET PASSWORD', () => {
+    it('call logger.error and errorHandler when service.forgetPassword rejects', async () => {
+      this.controller.service.forgetPassword = stub().rejects();
+
+      await this.controller.forgetPassword(this.request, this.response);
+
+      calledOnce(this.controller.service.forgetPassword);
+      notCalled(this.response.status);
+      notCalled(this.response.json);
+      calledOnce(this.controller.logger.error);
+      calledOnce(this.controller.errorHandler);
+    })
+
+    it('not call logger.error and errorHandler when service.forgetPassword return correct values', async () => {
+      await this.controller.forgetPassword(this.request, this.response);
+
+      calledOnce(this.controller.service.forgetPassword);
       calledOnce(this.response.status);
       calledOnce(this.response.json);
       notCalled(this.controller.logger.error);

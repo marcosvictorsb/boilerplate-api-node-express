@@ -19,6 +19,7 @@ describe('CUSTOMER SERVICE', () => {
     this.service.repository = {
       getByEmail: stub().resolves(undefined),
       create: stub().resolves(undefined),
+      getAllCustomers: stub().resolves(undefined)
     };
 
     this.service.logger = {
@@ -33,11 +34,30 @@ describe('CUSTOMER SERVICE', () => {
       OK: stub().returns(),
     }
 
+    this.service.emailService = {
+      sendEmailForgetPassword: stub().resolves(undefined)
+    }
+
     this.customer = {
       name: 'any_name',
       email: 'any_email',
       password: 'any_password',
     };
+
+    this.customers = [
+      {
+        id: 1,
+        name: 'any_name_one',
+        email: 'any_email_one',
+        password: 'any_password_one',
+      },
+      {
+        id: 2,
+        name: 'any_name_two',
+        email: 'any_email_two',
+        password: 'any_password_two',
+      }
+    ];
 
     this.customerWithPasswordEncrypt = {
       name: 'any_name',
@@ -282,6 +302,138 @@ describe('CUSTOMER SERVICE', () => {
       expect(isComparePassword).to.be.true;
       notCalled(this.service.logger.error);
       notCalled(this.service.httpResponseStatusCode.serverError);
+    })
+  })
+
+  describe('GET ALL CUSTOMERS', () => {
+    it('return conflict (status code 409) when not return customers', async () => {
+      await this.service.getAllCustomers();
+
+      calledOnce(this.service.repository.getAllCustomers);
+      calledOnce(this.service.logger.info);
+      calledOnce(this.service.httpResponseStatusCode.conflict);
+      calledWith(this.service.httpResponseStatusCode.conflict,
+        this.service.enumHelperCustomer.doNotCustomersRegistered);
+      notCalled(this.service.httpResponseStatusCode.OK);
+      notCalled(this.service.logger.error);
+      notCalled(this.service.httpResponseStatusCode.serverError);
+    })
+
+    it('call OK (status code 200) when return customers', async () => {
+      this.service.repository.getAllCustomers = stub().resolves(this.customers);
+
+      await this.service.getAllCustomers();
+
+      calledOnce(this.service.repository.getAllCustomers);
+
+      notCalled(this.service.logger.info);
+      notCalled(this.service.httpResponseStatusCode.conflict);
+      calledOnce(this.service.httpResponseStatusCode.OK);
+      calledWith(this.service.httpResponseStatusCode.OK, this.customers);
+      notCalled(this.service.logger.error);
+      notCalled(this.service.httpResponseStatusCode.serverError);
+    })
+
+    it('call serverError (status code 500) when repository.getAllCustomers rejects', async () => {
+      this.service.repository.getAllCustomers = stub().rejects();
+
+      await this.service.getAllCustomers();
+
+      calledOnce(this.service.repository.getAllCustomers);
+
+      notCalled(this.service.logger.info);
+      notCalled(this.service.httpResponseStatusCode.conflict);
+      notCalled(this.service.httpResponseStatusCode.OK);
+      calledOnce(this.service.logger.error);
+      calledOnce(this.service.httpResponseStatusCode.serverError);
+
+    })
+  })
+
+  describe('FORGET PASSWORD', () => {
+    it('return conflict (status code 409) when the method this.getByEmail not return customer', async () => {
+      this.emailCustomer = {
+        body: {
+          result: undefined
+        }
+      }
+      this.service.getByEmail = stub().resolves(this.emailCustomer)
+
+      await this.service.forgetPassword(this.customer.email);
+
+      calledOnce(this.service.getByEmail);
+      calledWith(this.service.getByEmail, this.customer.email)
+      calledOnce(this.service.httpResponseStatusCode.conflict);
+      calledWith(this.service.httpResponseStatusCode.conflict,
+        this.service.enumHelperCustomer.notFoundUser);
+      notCalled(this.service.emailService.sendEmailForgetPassword);
+      notCalled(this.service.httpResponseStatusCode.OK);
+      notCalled(this.service.logger.error);
+      notCalled(this.service.httpResponseStatusCode.serverError);
+    })
+
+    it('call email.sendEmailForgetPassword and OK (status code 200) when this.getByEmail return customer', async () => {
+      this.emailCustomer = {
+        body: {
+          result: this.customer
+        }
+      }
+      this.service.getByEmail = stub().resolves(this.emailCustomer)
+      this.service.emailService.sendEmailForgetPassword = stub().resolves('EMAIL SENDED');
+
+      await this.service.forgetPassword(this.customer.email);
+
+      calledOnce(this.service.getByEmail);
+      calledWith(this.service.getByEmail, this.customer.email)
+      notCalled(this.service.httpResponseStatusCode.conflict);
+      calledOnce(this.service.emailService.sendEmailForgetPassword);
+      calledWith(this.service.emailService.sendEmailForgetPassword,
+        this.customer.name, this.customer.email);
+      calledOnce(this.service.httpResponseStatusCode.OK);
+      calledWith(this.service.httpResponseStatusCode.OK, 'EMAIL SENDED');
+      notCalled(this.service.logger.error);
+      notCalled(this.service.httpResponseStatusCode.serverError);
+    })
+
+    it('call serverError (status code 500) when this.getByEmail rejects', async () => {
+      this.service.getByEmail = stub().rejects({});
+      this.emailCustomer = {
+        body: {
+          result: this.customer
+        }
+      }
+
+      await this.service.forgetPassword(this.customer.email);
+
+      calledOnce(this.service.getByEmail);
+      calledWith(this.service.getByEmail, this.customer.email)
+      notCalled(this.service.httpResponseStatusCode.conflict);
+      notCalled(this.service.emailService.sendEmailForgetPassword);
+      notCalled(this.service.httpResponseStatusCode.OK);
+      calledOnce(this.service.logger.error);
+      calledOnce(this.service.httpResponseStatusCode.serverError);
+    })
+
+    it('call serverError (status code 500) when emailService.sendEmailForgetPassword rejects', async () => {
+      this.service.emailService.sendEmailForgetPassword = stub().rejects({});
+      this.service.getByEmail = stub().resolves(this.emailCustomer);
+      this.emailCustomer = {
+        body: {
+          result: this.customer
+        }
+      }
+
+      await this.service.forgetPassword(this.customer.email);
+
+      calledOnce(this.service.getByEmail);
+      calledWith(this.service.getByEmail, this.customer.email)
+      notCalled(this.service.httpResponseStatusCode.conflict);
+      calledOnce(this.service.emailService.sendEmailForgetPassword);
+      calledWith(this.service.emailService.sendEmailForgetPassword,
+        this.customer.name, this.customer.email);
+      notCalled(this.service.httpResponseStatusCode.OK);
+      calledOnce(this.service.logger.error);
+      calledOnce(this.service.httpResponseStatusCode.serverError);
     })
   })
 });

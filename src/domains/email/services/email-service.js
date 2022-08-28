@@ -18,12 +18,10 @@ class EmailService {
         If you did not request a password reset, please ignore this email or reply to let us know.This password reset link is only valid for the next 30 minutes.
         Thanks, the [customer portal] team`,
       });
-
       return this.httpResponseStatusCode.OK(info);
     } catch (error) {
-      console.log({ error });
       this.logger.error('[CUSTOMER SERVICE] - error to send link to forget password');
-      throw error;
+      throw new Error(error);
     }
   }
 }
