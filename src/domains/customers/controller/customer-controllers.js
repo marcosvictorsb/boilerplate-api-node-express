@@ -40,6 +40,17 @@ class CustomerController extends Controller {
       return this.errorHandler(error, request, response);
     }
   }
+
+  async forgetPassword(request, response) {
+    try {
+      const { email } = request.query;
+      const result = await this.service.forgetPassword(email);
+      return response.status(result.status).json(result.body);
+    } catch (error) {
+      this.logger.error(`[CUSTOMER CONTROLLER] - ${this.enumHelperCustomer.errorToCreateUser}`);
+      return this.errorHandler(error, request, response);
+    }
+  }
 }
 
 module.exports = CustomerController;

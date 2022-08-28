@@ -6,6 +6,7 @@ class CustomerService {
     this.adapterEncryption = params.adapterEncryption;
     this.adapterToken = params.adapterToken;
     this.httpResponseStatusCode = params.httpResponseStatusCode;
+    this.emailService = params.emailService;
   }
 
   async create(params) {
@@ -74,6 +75,23 @@ class CustomerService {
       return this.httpResponseStatusCode.OK(customers);
     } catch (error) {
       this.logger.error('[CUSTOMER SERVICE] - intern error to get all customers');
+      return this.httpResponseStatusCode.serverError(error.message);
+    }
+  }
+
+  async forgetPassword(emailCustomer) {
+    try {
+      const result = await this.getByEmail(emailCustomer);
+      const customer = result.body.result;
+      if (!customer) {
+        return this.httpResponseStatusCode.conflict('user not found');
+      }
+      const { name, email } = customer;
+      const sendEmail = await this.emailService.sendEmailForgetPassword(name, email)
+      return this.httpResponseStatusCode.OK(sendEmail);
+    } catch (error) {
+      console.log(error)
+      this.logger.error('[CUSTOMER SERVICE] - error to get user by email');
       return this.httpResponseStatusCode.serverError(error.message);
     }
   }

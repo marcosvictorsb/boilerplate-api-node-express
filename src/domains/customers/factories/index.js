@@ -9,6 +9,7 @@ const CustomerModel = require('../../../infra/database/models/customers');
 const logger = require('../../../config/logger');
 const { customer: enumHelperCustomer } = require('../../../helpers/enumHelperCustomer');
 const { HttpResponseStatusCodes } = require('../../../protocols/httpResponseStatusCodes');
+const { getService: getServiceEmail } = require('../../email/factories');
 
 const getRepository = (params = {}) => new CustomerRepository({
   logger,
@@ -24,6 +25,7 @@ const getService = (params = {}) => new CustomerService({
   adapterEncryption: params.adapterEncryption || new AdapterEncryption({ bcrypt }),
   adapterToken: params.adapterToken || new AdapterToken(),
   httpResponseStatusCode: params.httpResponseStatusCode || new HttpResponseStatusCodes(),
+  emailService: params.emailService || getServiceEmail(),
 });
 
 const getController = (params = {}) => new CustomerController({
