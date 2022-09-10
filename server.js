@@ -1,21 +1,8 @@
-const express = require('express');
-// const helmet = require('helmet');
-const bodyParser = require('body-parser');
-const routers = require('./src/config/routers');
+require('dotenv').config();
+const logger = require('./src/config/logger');
 
-const app = express();
+const app = require('./app');
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-// app.use(helmet);
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       'script-src': ["'self'", 'example.com'],
-//       'style-src': null,
-//     },
-//   }),
-// );
-routers(app);
+const PORT = process.env.PORT || 3000;
 
-module.exports = app;
+app.listen(PORT, () => logger.info(`SERVER RUNNING IN ${PORT}`));

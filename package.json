@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "start:production": "nodemon serve.js",
+    "start:production": "nodemon server.js",
     "test": "mocha './test/**/*test.js'",
     "test:coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text mocha './test/**/*test.js'",
     "migration": "npx sequelize-cli db:migrate",
