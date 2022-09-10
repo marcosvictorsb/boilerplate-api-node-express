@@ -4,4 +4,5 @@ const controller = getController();
 
 exports.loadRoutes = function loadRoutes(server) {
   server.get('/health', (...args) => controller.health(...args));
+  server.get('/', (...args) => controller.health(...args));
 };

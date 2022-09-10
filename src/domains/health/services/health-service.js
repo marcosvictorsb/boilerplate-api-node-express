@@ -7,7 +7,11 @@ class HealthService {
   async health() {
     try {
       const currentDateTime = new Date().toLocaleString();
-      return this.httpResponseStatusCode.OK({ currentDateTime });
+      const response = {
+        currentDateTime,
+        message: 'server online',
+      };
+      return this.httpResponseStatusCode.OK(response);
     } catch (error) {
       this.logger.error('[HEALTH SERVICE] - error to generate current date time');
       return this.httpResponseStatusCode.serverError(error.message);
