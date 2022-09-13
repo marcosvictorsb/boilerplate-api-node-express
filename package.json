@@ -4,7 +4,7 @@
   "description": "boilerplate api node with express",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon server.js",
     "test": "mocha './test/**/*test.js'",
     "test:coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text mocha './test/**/*test.js'",
     "migration": "npx sequelize-cli db:migrate",
