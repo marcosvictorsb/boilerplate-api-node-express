@@ -23,11 +23,13 @@ class AuthenticationController extends Controller {
 
   async register(request, response) {
     try {
+      console.log(request.body);
       const customer = await this.validator.validateBodyParams(request.body);
       const result = await this.customerService.create(customer);
+      console.log({ status: result.status, body: result.body });
       return response.status(result.status).json(result.body);
     } catch (error) {
-      this.logger.error(`[REGISTER AUTHENTICATION] ${error.message} - ${this.enumHelperCustomer.customer.errorToCreatedUser}`);
+      // this.logger.error(`[REGISTER AUTHENTICATION] ${error.message} - ${this.enumHelperCustomer.customer.errorToCreatedUser}`);
       return this.errorHandler(error, request, response);
     }
   }

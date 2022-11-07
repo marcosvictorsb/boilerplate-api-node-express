@@ -11,7 +11,9 @@ class CustomerService {
 
   async create(params) {
     try {
+      console.log(params);
       const { name, email, password } = params;
+      console.log({ name, email, password });
       const customerExists = await this.repository.getByEmail(email);
       if (customerExists) {
         this.logger.info(`[CUSTOMER SERVICE] - ${this.enumHelperCustomer.alreadyExists} : ${email}`);
