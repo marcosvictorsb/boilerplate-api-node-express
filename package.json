@@ -1,14 +1,17 @@
 {
-  "name": "boilerplate-api-node-express",
+  "name": "api-mylifehub",
   "version": "1.0.0",
-  "description": "boilerplate api node with express",
+  "description": "SAAS",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon --watch src --ext ts --exec ts-node server.ts",
+    "dev": "npm run migration && npm run start",
     "test": "mocha './test/**/*test.js'",
     "test:coverage": "NODE_ENV=test nyc --reporter=lcov --reporter=text mocha './test/**/*test.js'",
     "migration": "npx sequelize-cli db:migrate",
-    "migration:create": "npx sequelize-cli migration:generate --name"
+    "migration:create": "npx sequelize-cli migration:generate --name",
+    "db:create": "node src/infra/database/createDataBase.js"
   },
   "_moduleAliases": {
     "@root": ".",
@@ -23,43 +26,55 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MarcosVictorSB/boilerplate-api-node-express.git"
+    "url": "git+https://github.com/marcosvictorsb/api-mylifehub.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MarcosVictorSB/boilerplate-api-node-express/issues"
+    "url": "https://github.com/marcosvictorsb/api-mylifehub/issues"
   },
-  "homepage": "https://github.com/MarcosVictorSB/boilerplate-api-node-express#readme",
+  "homepage": "https://github.com/marcosvictorsb/api-mylifehub#readme",
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/body-parser": "^1.19.5",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.0",
+    "body-parser": "^1.20.2",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
-    "express": "^4.18.1",
+    "express": "^4.19.2",
     "helmet": "^5.1.1",
     "joi": "^17.6.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "mocha": "^10.0.0",
     "module-alias": "^2.2.2",
     "mysql": "^2.18.1",
-    "mysql2": "^2.3.3",
+    "mysql2": "^3.11.0",
     "nodemailer": "^6.7.8",
-    "nodemon": "^2.0.19",
     "pre-commit": "^1.2.2",
     "sequelize": "^6.21.3",
     "sequelize-cli": "^6.4.1",
     "sinon": "^14.0.0",
     "sqlite3": "^5.0.10",
+    "ts-dotenv": "^0.9.1",
     "winston": "^3.8.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^22.5.4",
+    "@types/winston": "^2.4.4",
     "babel-plugin-istanbul": "^6.1.1",
+    "dotenv": "^16.4.5",
     "eslint": "^8.20.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "nyc": "^15.1.0"
+    "nodemon": "^3.1.4",
+    "nyc": "^15.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
   }
 }
