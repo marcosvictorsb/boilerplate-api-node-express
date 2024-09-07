@@ -1,0 +1,32 @@
+version: '3'
+services:
+  mysql-boilerplate:
+    image: mysql:5.7
+    container_name: mysql-boilerplate
+    restart: always
+    ports:
+      - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: development
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  boilerplate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: boilerplate
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mysql-boilerplate
+    env_file:
+      - .env  
+
+volumes:
+  mysql_data:  
+  
