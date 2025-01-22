@@ -1,43 +1,27 @@
 import AuthenticationController from '../controller/authentication-controller';
-import {AuthenticationService, IAuthenticationService} from '../service/authentication-service';
+import {AuthenticationService} from '../service/authentication-service';
 import { getServiceUser } from '../../users/factories/index';
-import { IUserService } from '../../users/services/userService';
 import logger from '../../../config/logger';
-import {AdapterToken, IAdapterToken} from '../adapter/adapterToken';
-import { HttpResponseHandler } from '../../../protocols/HttpResponseHandler';
+import {AdapterToken} from '../adapter/adapterToken';
+import { Response } from '../../../protocols/response';
 
-interface ServiceParams {
-  customerService?: IUserService;
-  logger?: typeof logger;
-  adapterToken?: IAdapterToken;
-  httpResponseHandler?: HttpResponseHandler;
-}
-
-interface ControllerParams {
-  serviceAuth?: IAuthenticationService;
-  userService?: IUserService;
-  logger?: typeof logger;
-  adapterToken?: IAdapterToken
-}
-
-const getServiceAuthentication = (params: ServiceParams = {}): AuthenticationService => {
+const getServiceAuthentication = (): AuthenticationService => {
   return new AuthenticationService({
-    userService: params.customerService || getServiceUser(),
-    logger: params.logger || logger,
-    adapterToken: params.adapterToken || new AdapterToken(),
-    httpResponseHandler: params.httpResponseHandler || new HttpResponseHandler(),
+    userService: getServiceUser(),
+    logger: logger,
+    adapterToken: new AdapterToken(),
+    response: Response,
   });
 };
 
-const getControllerAuthentication = (params: ControllerParams = {}): AuthenticationController => {
+const getControllerAuthentication = (): AuthenticationController => {
   return new AuthenticationController({
-    serviceAuth: params.serviceAuth || getServiceAuthentication(),
-    userService: params.userService || getServiceUser(),
-    logger: params.logger || logger,
-    adapterToken: params.adapterToken || new AdapterToken(),
+    serviceAuth: getServiceAuthentication(),
+    userService: getServiceUser(),
+    logger: logger,
+    adapterToken: new AdapterToken(),
   });
 };
-
 
 
 export {

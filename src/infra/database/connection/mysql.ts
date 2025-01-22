@@ -1,3 +1,4 @@
+import logger from '../../../config/logger';
 import 'dotenv/config';
 import { Sequelize } from 'sequelize';
 
@@ -12,13 +13,13 @@ const dialect = process.env.DB_DIALECT as string;
 const dbUri = process.env.DB_URI as string;
 
 if (env === 'development') {
-  console.log('BANCO DE DADOS --> DESENVOLVIMENTO');
+  logger.info('BANCO DE DADOS --> DESENVOLVIMENTO');
   sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     dialect: dialect as any, 
     host,
   });
 } else {
-  console.log('BANCO DE DADOS --> PRODUCTION');
+  logger.info('BANCO DE DADOS --> PRODUCTION');
   sequelize = new Sequelize(dbUri, { dialect: 'postgres' }); 
 }
 

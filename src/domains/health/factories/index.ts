@@ -1,17 +1,16 @@
 import HealthService from '../services/health-service';
 import HealthController from '../controller/health-controller';
 import logger from '../../../config/logger';
-import { HttpResponseHandler } from '../../../protocols/HttpResponseHandler';
+import { Response } from '../../../protocols/response';
 
 
 const getService = (): HealthService => new HealthService({
-  logger,
-  httpResponseHandler: new HttpResponseHandler(),
+  response: Response,
 });
 
 
-const getController = (params: { service?: HealthService } = {}): HealthController => new HealthController({
-  service: params.service || getService(),
+const getController = (): HealthController => new HealthController({
+  service: getService(),
   logger,
 });
 

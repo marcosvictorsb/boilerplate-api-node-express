@@ -1,11 +1,16 @@
 const { schema } = require('./customer-schema');
 
+interface Params {
+  schema: any;
+}
+
 class CustomerValidator {
-  constructor(params = {}) {
-    this.schema = params.schema || schema;
+  schema: any;
+  constructor(params: Params) {
+    this.schema = params.schema;
   }
 
-  async validateBodyParams(params) {
+  async validateBodyParams(params: any) {
     const validate = await this.schema.validateAsync(params);
     return validate;
   }

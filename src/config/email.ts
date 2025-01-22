@@ -1,7 +1,7 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
+const emailTransporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: process.env.EMAIL_PORT,
   tls: {
@@ -14,4 +14,4 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-module.exports = transporter;
+module.exports = emailTransporter;

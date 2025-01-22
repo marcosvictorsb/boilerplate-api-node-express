@@ -10,9 +10,19 @@ const logLevels: Record<string, number> = {
 };
 
 
+const logFormat = format.combine(
+  format.colorize(), 
+  format.timestamp({
+    format: 'DD-MM-YYYY HH:mm:ss',
+  }),
+  format.printf(({ timestamp, level, message }) => {
+    return `${timestamp} [${level}]: ${message}`;
+  })
+);
+
 const logger: Logger = createLogger({
   levels: logLevels,
-  format: format.combine(format.timestamp(), format.json()),
+  format: logFormat,
   transports: [new transports.Console()],
 });
 

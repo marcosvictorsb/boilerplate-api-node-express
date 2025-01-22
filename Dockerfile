@@ -4,14 +4,18 @@ FROM node:20-alpine
 WORKDIR /usr/src/app
 
 # Copia os arquivos de configuração do npm e instala as dependências
-COPY package.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 
 # Copia o restante do código da aplicação
 COPY . .
 
-# Expõe as portas 3001
-EXPOSE 3003
+# Compila o código TypeScript para a pasta dist
+# RUN npm run build
+
+# Expõe a porta 3000
+EXPOSE 3000
 
 # Comando para iniciar a aplicação
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
+

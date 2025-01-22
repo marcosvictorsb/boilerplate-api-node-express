@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const schema = Joi.object({
+const authSchema = Joi.object({
   email: Joi.string()
     .required(),
   password: Joi.string()
@@ -8,4 +8,4 @@ const schema = Joi.object({
     .required(),
 });
 
-module.exports = { schema };
+module.exports = { authSchema };

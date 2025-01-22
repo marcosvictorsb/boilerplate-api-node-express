@@ -6,47 +6,30 @@ import { AdapterEncryption } from '../adapter/adapterEncryption';
 import { AdapterToken } from '../../authentication/adapter/adapterToken';
 import CustomerModel from '../model/userModel';
 import logger from '../../../config/logger';
-import { HttpResponseHandler } from '../../../protocols/HttpResponseHandler';
+import { Response } from '../../../protocols/response';
 
-interface RepositoryParams {
-  httpResponseHandler?: HttpResponseHandler;
-}
-
-interface ServiceParams {
-  repository?: UserRepository;
-  logger?: typeof logger;
-  adapterEncryption?: AdapterEncryption;
-  adapterToken?: AdapterToken;
-  httpResponseHandler?: HttpResponseHandler;
-}
-
-interface ControllerParams {
-  service?: IUserService;
-  logger?: typeof logger;
-}
-
-const getRepositoryUser = (params: RepositoryParams = {}): UserRepository => {
+const getRepositoryUser = (): UserRepository => {
   return new UserRepository({
     logger,
     model: CustomerModel,
-    httpResponseHandler: params.httpResponseHandler || new HttpResponseHandler(),
+    response: Response,
   });
 };
 
-const getServiceUser = (params: ServiceParams = {}): UserService => {
+const getServiceUser = (): UserService => {
   return new UserService({
-    repository: params.repository || getRepositoryUser(),
-    logger: params.logger || logger,
-    adapterEncryption: params.adapterEncryption || new AdapterEncryption({ bcrypt }),
-    adapterToken: params.adapterToken || new AdapterToken(),
-    httpResponseHandler: params.httpResponseHandler || new HttpResponseHandler(),
+    repository: getRepositoryUser(),
+    logger: logger,
+    adapterEncryption: new AdapterEncryption({ bcrypt }),
+    adapterToken: new AdapterToken(),
+    response: Response
   });
 };
 
-const getControllerUser = (params: ControllerParams = {}): CustomerController => {
+const getControllerUser = (): CustomerController => {
   return new CustomerController({
-    service: params.service || getServiceUser(),
-    logger: params.logger || logger,
+    service: getServiceUser(),
+    logger: logger,
   });
 };
 

@@ -1,6 +1,6 @@
-const Joi = require('joi');
+import Joi from 'joi'
 
-const schema = Joi.object({
+const customerSchema = Joi.object({
   name: Joi.string()
     .min(3)
     .max(30)
@@ -12,4 +12,4 @@ const schema = Joi.object({
   passwordRepeat: Joi.ref('password'),
 });
 
-module.exports = { schema };
+module.exports = { customerSchema };

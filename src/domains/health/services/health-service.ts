@@ -1,22 +1,25 @@
 import logger from '../../../config/logger';
-import { HttpResponseHandler } from '../../../protocols/HttpResponseHandler';
+import { Response } from '../../../protocols/response';
 
 interface HealthServiceParams {
-  logger?: typeof logger;
-  httpResponseHandler?: HttpResponseHandler;
+  response: typeof Response;
 }
 
-class HealthService {
-  private logger: typeof logger;
-  private httpResponseHandler: HttpResponseHandler
+export interface IHealthService {
+  health(): Promise<any>;
+}
 
-  constructor(params: HealthServiceParams = {}) {
-    this.logger = params.logger || logger;
-    this.httpResponseHandler = params.httpResponseHandler  || new HttpResponseHandler();
+class HealthService implements IHealthService {
+  private response: typeof Response
+
+  constructor(params: HealthServiceParams) {
+    this.response = params.response;
   }
 
   public async health(): Promise<any> {
-    return this.httpResponseHandler.OK(new Date());
+    return this.response.ok({
+      serverDate: new Date()
+    });
   }
 }
 

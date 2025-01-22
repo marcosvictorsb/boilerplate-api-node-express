@@ -7,48 +7,48 @@ export const HttpStatusCode = {
   ServerError: 500,
 } as const;
 
-type HttpResponse = {
+type HttpResponse<T = any> = {
   status: number;
-  body: any;
+  body: T;
 };
 
-export class HttpResponseHandler {
-  OK(response: any): HttpResponse {
+export class Response {
+  static ok<T>(response: T): HttpResponse<T> {
     return {
       status: HttpStatusCode.OK,
       body: response,
     };
   }
 
-  conflict(message: string): HttpResponse {
+  static conflict(message: string): HttpResponse<{ message: string }> {
     return {
       status: HttpStatusCode.Conflict,
       body: { message },
     };
   }
 
-  noContent(message: string): HttpResponse {
+  static noContent(message: string): HttpResponse<{ result: string }> {
     return {
       status: HttpStatusCode.NoContent,
       body: { result: message },
     };
   }
 
-  created(response: any): HttpResponse {
+  static created<T>(response: T): HttpResponse<{ response: T }> {
     return {
       status: HttpStatusCode.Created,
       body: { response },
     };
   }
 
-  notFound(response: any): HttpResponse {
+  static notFound<T>(response: T): HttpResponse<{ result: T }> {
     return {
       status: HttpStatusCode.NotFound,
       body: { result: response },
     };
   }
 
-  serverError(error: any): HttpResponse {
+  static serverError(error: any): HttpResponse<{ error: any }> {
     return {
       status: HttpStatusCode.ServerError,
       body: { error },

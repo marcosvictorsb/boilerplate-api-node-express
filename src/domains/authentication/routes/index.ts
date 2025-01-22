@@ -19,4 +19,3 @@ export function loadIndex(server: Express): void {
     }
   });
 }
-

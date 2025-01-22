@@ -1,10 +1,15 @@
+interface Params {
+  authSchema: any;
+}
+
 class AuthenticationValidator {
-  constructor(params = {}) {
-    this.schema = params.schema;
+  authSchema: any;
+  constructor(params: Params) {
+    this.authSchema = params.authSchema;
   }
 
-  async validateBodyParams(params) {
-    const validate = await this.schema.validateAsync(params);
+  async validateBodyParams(params: any) {
+    const validate = await this.authSchema.validateAsync(params);
     return validate;
   }
 }
