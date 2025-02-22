@@ -12,15 +12,11 @@ const host = process.env.DB_HOST as string;
 const dialect = process.env.DB_DIALECT as string;
 const dbUri = process.env.DB_URI as string;
 
-if (env === 'development') {
-  logger.info('BANCO DE DADOS --> DESENVOLVIMENTO');
-  sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-    dialect: dialect as any, 
-    host,
-  });
-} else {
-  logger.info('BANCO DE DADOS --> PRODUCTION');
-  sequelize = new Sequelize(dbUri, { dialect: 'postgres' }); 
-}
+
+logger.info('BANCO DE DADOS --> DESENVOLVIMENTO');
+sequelize = new Sequelize(dbName, dbUser, dbPassword, {
+  dialect: dialect as any, 
+  host,
+});
 
 export default sequelize;

@@ -1,17 +1,17 @@
 import HealthService from '../services/health-service';
-import HealthController from '../controller/health-controller';
+import { HealthController } from '../controller/health.controller';
 import logger from '../../../config/logger';
-import { Response } from '../../../protocols/response';
+import { Presenter } from '../../../protocols//presenter';
 
 
-const getService = (): HealthService => new HealthService({
-  response: Response,
-});
+const getService = (): HealthService => new HealthService({presenter: new Presenter()});
 
 
 const getController = (): HealthController => new HealthController({
   service: getService(),
-  logger,
+  gateway: {
+    logger: logger,
+  },
 });
 
 export {

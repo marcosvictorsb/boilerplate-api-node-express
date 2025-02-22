@@ -1,8 +1,7 @@
-import logger from '../../../config/logger';
-import { Response } from '../../../protocols/response';
+import { Presenter } from '../../../protocols/presenter';
 
-interface HealthServiceParams {
-  response: typeof Response;
+type HealthServiceParams = {
+  presenter: Presenter;
 }
 
 export interface IHealthService {
@@ -10,15 +9,15 @@ export interface IHealthService {
 }
 
 class HealthService implements IHealthService {
-  private response: typeof Response
+  private presenter: Presenter
 
   constructor(params: HealthServiceParams) {
-    this.response = params.response;
+    this.presenter = params.presenter;
   }
 
   public async health(): Promise<any> {
-    return this.response.ok({
-      serverDate: new Date()
+    return this.presenter.OK({
+      serverDate: new Date(),
     });
   }
 }

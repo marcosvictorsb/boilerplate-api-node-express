@@ -1,29 +1,27 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import mysql from '../../../infra/database/connection/mysql';
 
 interface UserAttributes {
-  id: number;
-  uuid: string;
+  id?: number;
+  uuid?: string;
   name?: string;
   email?: string;
   password?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
-
-class UserModal extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
-  public uuid!: string;
-  public name?: string;
-  public email?: string;
-  public password?: string;
-  public createdAt!: Date;
-  public updatedAt!: Date;
+class UserModel extends Model {
+  id?: number;
+  uuid?: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
-UserModal.init(
+UserModel.init(
   {
     id: {
       allowNull: false,
@@ -45,20 +43,26 @@ UserModal.init(
     password: {
       type: DataTypes.STRING,
     },
-    createdAt: {
+    created_at: {
       allowNull: false,
       type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
-    updatedAt: {
+    updated_at: {
       allowNull: false,
       type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
   },
   {
     sequelize: mysql,
     tableName: 'users',
     timestamps: true,
+    underscored: true,
   }
 );
 
-export default UserModal;
+export {
+  UserModel,
+  UserAttributes
+};

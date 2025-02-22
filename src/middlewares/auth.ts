@@ -7,7 +7,7 @@ interface CustomRequest extends Request {
   userId?: string;
 }
 
-const authMiddleware = (request: CustomRequest, response: Response, next: NextFunction) => {
+export const authMiddleware = (request: CustomRequest, response: Response, next: NextFunction) => {
   try {
     const authHeader = request.header('authorization');
     if (!authHeader) return response.status(401).json({ error: 'No token provided' });
@@ -28,6 +28,3 @@ const authMiddleware = (request: CustomRequest, response: Response, next: NextFu
   }
 };
 
-module.exports = {
-  authMiddleware,
-};

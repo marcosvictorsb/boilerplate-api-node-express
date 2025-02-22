@@ -14,7 +14,7 @@ export interface IAdapterToken {
 export class AdapterToken implements IAdapterToken{
   public sign(user: User): string {
     const secret = process.env.JWT_SECRET_SIGN as string;
-    const expiration = process.env.ONE_DAY_EXPIRATION as string;
+    const expiration = Math.floor(Date.now() / 1000) + 86400;
 
     const token = jwt.sign(user, secret, {
       expiresIn: expiration,

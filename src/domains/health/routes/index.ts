@@ -1,21 +1,9 @@
-import path from 'path';
-import fs from 'fs';
-import { Express } from 'express';
+import { Router } from 'express';
+import { getController } from '../factories';
 
+const controller = getController();
 
-export function loadIndex(server: Express): void {
-  const normalizedPath = path.join(__dirname);
+const router = Router();
+router.get('/', (request, response) => controller.health(request, response));
 
-  fs.readdirSync(normalizedPath).forEach((file) => {
-    if (file !== 'index.ts') { 
-      const modulePath = `./${file}`;
-      import(modulePath).then(routeModule => {
-        if (routeModule && typeof routeModule.loadRoutes === 'function') {
-          routeModule.loadRoutes(server);
-        }
-      }).catch(error => {
-        console.error(`Failed to load module ${modulePath}:`, error);
-      });
-    }
-  });
-}
+export default router;
