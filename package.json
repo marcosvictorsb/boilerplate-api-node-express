@@ -1,5 +1,5 @@
 {
-  "name": "api-mylifehub",
+  "name": "gunno",
   "version": "1.0.0",
   "description": "SAAS",
   "main": "index.js",
@@ -22,14 +22,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marcosvictorsb/api-mylifehub.git"
+    "url": "git+https://github.com/marcosvictorsb/gunno.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/marcosvictorsb/api-mylifehub/issues"
+    "url": "https://github.com/marcosvictorsb/gunno/issues"
   },
-  "homepage": "https://github.com/marcosvictorsb/api-mylifehub#readme",
+  "homepage": "https://github.com/marcosvictorsb/gunno#readme",
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.5",
