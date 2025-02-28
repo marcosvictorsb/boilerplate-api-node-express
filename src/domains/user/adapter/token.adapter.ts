@@ -1,5 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import { IToken } from '../interfaces/user.interface';
 
 dotenv.config();
 
@@ -7,9 +8,6 @@ interface User {
   [key: string]: any;
 }
 
-export interface IToken {
-  sign(user: User, secret: string, options: any): string;
-}
 
 export class TokenAdapter implements IToken{
   public sign(user: User): string {

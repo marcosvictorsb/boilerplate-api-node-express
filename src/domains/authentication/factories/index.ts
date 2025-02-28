@@ -4,7 +4,7 @@ import { AdapterEncryption } from '../adapter/encryption.adapter';
 import {AdapterToken} from '../adapter/token.adapter';
 import { Presenter } from '../../../protocols/presenter';
 import {AuthenticationController} from '../controllers/authentication.controller';
-import {  getRepositoryUser } from '../../user/factories/index';
+import {  userRepository } from '../../user/factories/user.factory';
 import {AuthenticationService } from '../services/authentication.services';
 
 
@@ -18,7 +18,7 @@ interface Gateway {
 const getGateway = (): Gateway => {
   return {
     logger,
-    userRepository: getRepositoryUser(),
+    userRepository: userRepository,
     adapterToken: new AdapterToken(),
     adapterEncryption: new AdapterEncryption({ bcrypt }),
   }

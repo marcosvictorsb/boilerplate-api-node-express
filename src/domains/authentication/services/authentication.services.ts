@@ -1,9 +1,8 @@
 import logger from '../../../config/logger';
 import { IAdapterToken } from '../adapter/token.adapter';
-import { IUserRepository } from '../../user/repositories/user.repository';
+import { IUserRepository } from '../../user/interfaces/user.interface';
 import { IAdapterEncryption } from '../adapter/encryption.adapter';
 import { Presenter } from '../../../protocols/presenter';
-import { UserAttributes } from '../../../domains/user/model/user.model';
 
 type AuthenticationServiceGateway = {
   logger: typeof logger;
@@ -40,7 +39,7 @@ export class AuthenticationService implements IAuthenticationService {
     try {
       this.gateway.logger.info(`Iniciando a busca pelo usuário com o email: ${email}`);
 
-      const user = await this.gateway.userRepository.getUser({ email });
+      const user = await this.gateway.userRepository.find({ email });
       if (!user) {
         this.gateway.logger.info(`Não encontrado usuário com esse email: ${email}`);
         return this.presenter.conflict('Email ou senha está incorreto');
@@ -67,7 +66,7 @@ export class AuthenticationService implements IAuthenticationService {
 
   public async register(name: string, email: string, password: string): Promise<any> {  
     try {
-      const user = await this.gateway.userRepository.getUser({ email });
+      const user = await this.gateway.userRepository.find({ email });
       if (user) {
         this.gateway.logger?.info(`O ${email} já está cadastrado no banco de dados`);
         return this.presenter.conflict('Email já está em uso');

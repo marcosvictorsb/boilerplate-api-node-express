@@ -1,84 +1,98 @@
-import { UserModel, UserAttributes } from '../model/user.model';
+import { UserModel } from '../model/user.model';
+import { UserEntity } from '../entities/user.entity';
 import { ModelStatic, Op } from 'sequelize';
-
-const FIRST_POSITION = 0;
-
-interface UserRepositoryParams {
-  model: ModelStatic<UserModel>; 
-}
-
-export interface IUserRepository {
-  create(User: any): Promise<UserModel | null>;
-  getUser(criteria: FindCriteria): Promise<UserModel | null>;
-  getUsers(criteria: FindCriteria): Promise<UserModel[]>;
-}
-
-interface FindCriteria {
-  name?: string;
-  email?: string;
-  password?: string;
-}
+import { DeleteCriteria, FindCriteria, IUserRepository, UpdateCriteria, UserRepositoryParams } from '../interfaces/user.interface';
 
 export class UserRepository implements IUserRepository  {
   protected model: ModelStatic<UserModel> ;
 
   constructor(params: UserRepositoryParams) {
     this.model = params.model;
-  }
+  }  
 
-  private getConditions(criteria: FindCriteria): Record<string, any> {
-    const { name, email, password } = criteria
+  private getConditions(criteria: FindCriteria): Record<string, any> {    
     const whereConditions: Record<string, any> = {};
 
-    if (name) {
-      whereConditions['name'] = name
+    if (criteria.name) {
+      whereConditions['name'] = criteria.name;
     }
 
-    if (email) {
-      whereConditions['email'] = email
+    if (criteria.email) {
+      whereConditions['email'] = criteria.email;
     }
 
-    if (password) {
-      whereConditions['password'] = password;
+    if (criteria.password) {
+      whereConditions['password'] = criteria.password;
     }
   
     return whereConditions;
   }
 
-  public async create(User: any): Promise<UserModel | null> {
-    const userCreated = await this.model.create(User);
-    return userCreated;
+  public async create(user: { email: string; password: string }): Promise<UserEntity> {
+    const createdUser = await this.model.create(user);
+    return new UserEntity(
+      createdUser.id,
+      createdUser.uuid,
+      createdUser.email,
+      createdUser.password,
+      createdUser.created_at,
+      createdUser.updated_at,
+    );;
   }
 
-  public async getUser(criteria: FindCriteria): Promise<UserModel | null> {
+  public async find(criteria: FindCriteria): Promise<UserEntity | null> {
     const user = await this.model.findOne({
       where: this.getConditions(criteria),
       raw: true,
     });
 
-    return user ? user : null;
+    if (!user) return null;
+
+    return new UserEntity(
+      user.id,
+      user.email,
+      user.uuid,
+      user.password,
+      user?.created_at,
+      user.updated_at,
+    );
   }
 
-  public async getUsers(criteria: any): Promise<any | null> {
-    return this.model.findAll({
-      where: this.getConditions(criteria),
-      attributes: {exclude: ['password']},
-      raw: true
-    });
+  public async findAll(): Promise<UserEntity[]> {
+    const users = await this.model.findAll();
+    return users.map(
+      (user: any) =>
+        new UserEntity(
+          user.id,
+          user.email,
+          user.password,
+          user.createdAt,
+          user.updatedAt,
+        ),
+    );
   }
 
-  // public async update(id: number, data: Partial<T>): Promise<T[]> {
-  //   return this.model.update(data, {
-  //     where: { id },
-  //     returning: true,
-  //   });
-  // }
+  public async update(criteria: UpdateCriteria, data: Partial<UserEntity>): Promise<UserEntity | null> {
+    const [affectedRows] = await this.model.update(data, { where: { id: criteria.id } });
+    if (affectedRows === 0) return null;
 
-  // public async delete(id: number): Promise<number> {
-  //   return this.model.destroy({
-  //     where: { id },
-  //   });
-  // }
+    const updatedUser = await this.model.findByPk(criteria.id);
+    if (!updatedUser) return null;
+
+    return new UserEntity(
+      updatedUser.id,
+      updatedUser.uuid,
+      updatedUser.email,
+      updatedUser.password,
+      updatedUser.created_at,
+      updatedUser.updated_at,
+    );
+  }
+
+  public async delete(criteria: DeleteCriteria): Promise<boolean> {
+    const affectedRows = await this.model.destroy({ where: { id: criteria.id } });
+    return affectedRows > 0;
+  }
 }
 
 

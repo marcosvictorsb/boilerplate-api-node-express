@@ -1,22 +1,11 @@
-import path from 'path';
-import fs from 'fs';
-import { Express } from 'express';
+import { Express, Request, Response, NextFunction, Router } from 'express';
+import { userController } from '../factories/user.factory';
 
-// Função para carregar rotas
-export function loadIndex(server: Express): void {
-  const normalizedPath = path.join(__dirname);
 
-  fs.readdirSync(normalizedPath).forEach((file) => {
-    if (file !== 'index.ts') { 
-      const modulePath = `./${file}`;
-      import(modulePath).then(routeModule => {
-        if (routeModule && typeof routeModule.loadRoutes === 'function') {
-          routeModule.loadRoutes(server);
-        }
-      }).catch(error => {
-        console.error(`Failed to load module ${modulePath}:`, error);
-      });
-    }
-  });
-}
+const router = Router();
 
+
+router.post("/", (request, response) => userController.create(request, response));
+// router.get("/", (request, response) => userController.getUsers(request, response));
+
+export default router;

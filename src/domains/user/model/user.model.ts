@@ -1,24 +1,14 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import mysql from '../../../infra/database/connection/mysql';
 
-interface UserAttributes {
-  id?: number;
-  uuid?: string;
-  name?: string;
-  email?: string;
-  password?: string;
-  created_at?: Date;
-  updated_at?: Date;
-}
-
 class UserModel extends Model {
-  id?: number;
-  uuid?: string;
-  name?: string;
-  email?: string;
-  password?: string;
-  created_at?: Date;
-  updated_at?: Date;
+  id!: number;
+  uuid!: string;
+  name!: string;
+  email!: string;
+  password!: string;
+  created_at!: Date;
+  updated_at!: Date;
 }
 
 UserModel.init(
@@ -62,7 +52,4 @@ UserModel.init(
   }
 );
 
-export {
-  UserModel,
-  UserAttributes
-};
+export { UserModel };

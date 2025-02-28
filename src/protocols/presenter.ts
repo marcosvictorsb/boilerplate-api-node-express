@@ -12,13 +12,14 @@ export const HttpStatusCode = {
   ServerError: 500,
 } as const;
 
-type HttpResponse = {
+export type HttpResponse = {
   status: number;
   body: any;
 };
 
+
 export interface IPresenter {
-  OK(response: any): HttpResponse;
+  OK(response?: any): HttpResponse;
   conflict(message: string): HttpResponse;
   noContent(message: string): HttpResponse;
   created(response: any): HttpResponse;
@@ -29,7 +30,7 @@ export interface IPresenter {
 
 
 export class Presenter implements IPresenter{
-  OK(response: any): HttpResponse {
+  OK(response?: any): HttpResponse {
     return {
       status: HttpStatusCode.OK,
       body: response,
