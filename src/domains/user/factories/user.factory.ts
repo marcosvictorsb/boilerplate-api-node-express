@@ -1,22 +1,12 @@
 import bcrypt from 'bcryptjs';
-// import { UserService } from '../services/user.service';
-// import { UserController } from '../controller/user.controllers';
-// import { UserRepository } from '../repositories/user.repository';
-// import { UserModel } from '../model/user.model';
 import logger from '../../../config/logger';
-// import { Presenter } from '../../../protocols/presenter';
-// import { EncryptionAdapter } from '../adapter/encryption.adapter';
-// import { TokenAdapter } from '../adapter/token.adapter';
-
 import { UserRepository } from '../repositories/user.repository';
 import { UserGateway } from '../gateways/user.gateway';
-import { UserService } from '../services/user.service';
 import { CreateUserUseCase } from '../use-cases/create.user.usecase';
-// import { GetUsersUseCase } from '../use-cases/create.user.usecase';
 import { EncryptionAdapter } from '../adapter/encryption.adapter';
 import { TokenAdapter } from '../adapter/token.adapter';
  import { UserModel } from '../model/user.model';
-import { IUserGateway, UserGatewayParams } from '../interfaces/user.interface';
+import { UserGatewayParams } from '../interfaces/user.interface';
 import { UserController } from '../controller/user.controllers';
 import { Presenter } from '../../../protocols/presenter';
 

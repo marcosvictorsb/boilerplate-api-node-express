@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { IUserService } from '../services/user.service';
 import { CreateUserUseCase } from '../use-cases/create.user.usecase';
 import { UserControllerParams } from '../interfaces/user.interface';
 
