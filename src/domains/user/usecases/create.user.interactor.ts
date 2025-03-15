@@ -3,7 +3,7 @@ import { UserEntity } from '../entities/user.entity';
 import { IPresenter } from '../../../protocols/presenter';
 import { HttpResponse } from '../../../protocols/http';
 
-export class CreateUserUseCase {
+export class CreateUserInteractor {
   constructor(private readonly gateway: IUserGateway, private presenter: IPresenter) {}
 
   async execute(email: string, password: string): Promise<HttpResponse> {

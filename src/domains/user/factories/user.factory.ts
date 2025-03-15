@@ -2,10 +2,10 @@ import bcrypt from 'bcryptjs';
 import logger from '../../../config/logger';
 import { UserRepository } from '../repositories/user.repository';
 import { UserGateway } from '../gateways/user.gateway';
-import { CreateUserUseCase } from '../use-cases/create.user.usecase';
+import { CreateUserInteractor } from '../usecases/create.user.interactor';
 import { EncryptionAdapter } from '../adapter/encryption.adapter';
 import { TokenAdapter } from '../adapter/token.adapter';
- import { UserModel } from '../model/user.model';
+import { UserModel } from '../model/user.model';
 import { UserGatewayParams } from '../interfaces/user.interface';
 import { UserController } from '../controller/user.controllers';
 import { Presenter } from '../../../protocols/presenter';
@@ -34,18 +34,18 @@ const userGateway = new UserGateway(gateway);
 
 // Configuração dos use-cases
 const presenter = new Presenter();
-const createUserUseCase = new CreateUserUseCase(userGateway, presenter);
+const createUserInteractor = new CreateUserInteractor(userGateway, presenter);
 // const getUsersUseCase = new GetUsersUseCase(userGateway);
 
 
-const userController = new UserController({ useCases: {createUser: createUserUseCase}});
+const userController = new UserController({ useCases: {createUser: createUserInteractor}});
 
 // Exportação das instâncias
 export {
   userRepository,
   userGateway,
   // userService,
-  createUserUseCase,
+  createUserInteractor,
   userController
   // getUsersUseCase,
 };

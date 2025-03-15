@@ -30,14 +30,7 @@ export class UserRepository implements IUserRepository  {
 
   public async create(user: { email: string; password: string }): Promise<UserEntity> {
     const createdUser = await this.model.create(user);
-    return new UserEntity(
-      createdUser.id,
-      createdUser.uuid,
-      createdUser.email,
-      createdUser.password,
-      createdUser.created_at,
-      createdUser.updated_at,
-    );;
+    return new UserEntity(createdUser);
   }
 
   public async find(criteria: FindCriteria): Promise<UserEntity | null> {
@@ -48,27 +41,14 @@ export class UserRepository implements IUserRepository  {
 
     if (!user) return null;
 
-    return new UserEntity(
-      user.id,
-      user.email,
-      user.uuid,
-      user.password,
-      user?.created_at,
-      user.updated_at,
-    );
+    return new UserEntity(user);
   }
 
   public async findAll(): Promise<UserEntity[]> {
     const users = await this.model.findAll();
     return users.map(
       (user: any) =>
-        new UserEntity(
-          user.id,
-          user.email,
-          user.password,
-          user.createdAt,
-          user.updatedAt,
-        ),
+        new UserEntity(user),
     );
   }
 
@@ -79,14 +59,7 @@ export class UserRepository implements IUserRepository  {
     const updatedUser = await this.model.findByPk(criteria.id);
     if (!updatedUser) return null;
 
-    return new UserEntity(
-      updatedUser.id,
-      updatedUser.uuid,
-      updatedUser.email,
-      updatedUser.password,
-      updatedUser.created_at,
-      updatedUser.updated_at,
-    );
+    return new UserEntity(updatedUser);
   }
 
   public async delete(criteria: DeleteCriteria): Promise<boolean> {

@@ -1,11 +1,9 @@
-import { Express, Request, Response, NextFunction, Router } from 'express';
-import { getControllerAuthentication } from '../factories/index';
+import { Router } from 'express';
+import { getTokenController } from '../factories/index';
 
-const controller = getControllerAuthentication();
 
 const router = Router();
 
-router.post("/", (request, response) => controller.authenticate(request, response));
-router.post("/register", (request, response) => controller.register(request, response));
+router.post("/token", (request, response) => getTokenController.getToken(request, response));
 
 export default router;

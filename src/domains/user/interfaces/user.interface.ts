@@ -3,7 +3,7 @@ import { UserEntity as User } from '../entities/user.entity';
 import { UserModel } from '../model/user.model';
 import { IEncryption } from '../adapter/encryption.adapter';
 import logger from '../../../config/logger';
-import { CreateUserUseCase } from '../use-cases/create.user.usecase';
+import { CreateUserInteractor } from '../usecases/create.user.interactor';
 
 export type FindCriteria = {
   name?: string;
@@ -39,7 +39,7 @@ export type UserGatewayParams = {
 
 export interface UserControllerParams {
   useCases: {
-    createUser: CreateUserUseCase
+    createUser: CreateUserInteractor
   };
 }
 
